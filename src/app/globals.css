@@ -5,6 +5,7 @@
 html,
 body {
   height: 100vh;
+  direction: rtl;
 }
 
 *,
@@ -20,33 +21,40 @@ B (255 */
 
 @layer base {
   :root {
-    --background: 216 100% 98.04%;
-    --foreground: 213.6 100% 4.9%;
+    /* Name: custom color palette
+       Author: Ilias Ism
+       URL: https://gradient.page */
 
-    --primary: 214.12 100% 50%;
-    --primary-foreground: 0 0% 100%;
+    /* CSS: .bg-gradient { background: var(--gradient) } */
+    --gradient: #1e6281;
+    --background: 230 100% 98.5%;
+    --foreground: 220 10% 1%;
 
-    --card: 216 100% 98.04%;
-    --card-foreground: 213.6 100% 4.9%;
+    --muted: 220 10% 92.5%;
+    --muted-foreground: 220 5% 42.5%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 213.6 100% 4.9%;
+    --popover: 220 10% 92.5%;
+    --popover-foreground: 220 10% 1.25%;
 
-    --secondary: 214.74 100% 92.55%;
-    --secondary-foreground: 216 100% 0.98%;
+    --card: 220 10% 92.5%;
+    --card-foreground: 220 10% 1.25%;
 
-    --muted: 213.6 100% 95.1%;
-    --muted-foreground: 0 0% 40%;
+    --border: 220 15% 90%;
+    --input: 220 15% 90%;
 
-    --accent: 213.6 100% 95.1%;
-    --accent-foreground: 214.12 100% 50%;
+    --primary: 199, 62%, 31%;
+    --primary-foreground: 220 2% 92.5%;
+
+    --secondary: 220 5% 96.25%;
+    --secondary-foreground: 199, 89%, 50%;
+
+    --accent: 220 5% 96.25%;
+    --accent-foreground: 220 7% 12.5%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 90.2%;
-    --input: 0 0% 90.2%;
-    --ring: 214.12 100% 50%;
+    --ring: 220 100% 25%;
 
     --radius: 0.5rem;
   }
@@ -57,36 +65,36 @@ B (255 */
        URL: https://gradient.page */
 
     /* CSS: .bg-gradient { background: var(--gradient) } */
-    --gradient: linear-gradient(to top left, #007adf, #00ecbc);
+    --gradient: #72c6ef;
 
-    --background: 220 65% 3.52%;
-    --foreground: 220 10% 97.2%;
+    --background: 212 52% 5.52%;
+    --foreground: 212 8% 98.45%;
 
-    --muted: 220 50% 13.2%;
-    --muted-foreground: 220 10% 54.4%;
+    --muted: 212 40% 20.7%;
+    --muted-foreground: 212 8% 56.9%;
 
-    --popover: 220 45% 5.72%;
-    --popover-foreground: 220 10% 97.2%;
+    --popover: 212 49% 8.969999999999999%;
+    --popover-foreground: 212 8% 98.45%;
 
-    --card: 220 45% 5.72%;
-    --card-foreground: 220 10% 97.2%;
+    --card: 212 49% 8.969999999999999%;
+    --card-foreground: 212 8% 98.45%;
 
-    --border: 220 50% 13.2%;
-    --input: 220 50% 13.2%;
+    --border: 212 40% 20.7%;
+    --input: 212 40% 20.7%;
 
-    --primary: 220 100% 44%;
-    --primary-foreground: 220 10% 97.2%;
+    --primary: 212 80% 69%;
+    --primary-foreground: 212 8% 6.8999999999999995%;
 
-    --secondary: 220 50% 13.2%;
-    --secondary-foreground: 220 10% 97.2%;
+    --secondary: 212 40% 20.7%;
+    --secondary-foreground: 212 8% 98.45%;
 
-    --accent: 220 50% 13.2%;
-    --accent-foreground: 220 10% 97.2%;
+    --accent: 212 40% 20.7%;
+    --accent-foreground: 212 8% 98.45%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 220 10% 97.2%;
+    --destructive-foreground: 212 8% 98.45%;
 
-    --ring: 220 100% 44%;
+    --ring: 212 80% 69%;
   }
 }
 
@@ -94,8 +102,34 @@ B (255 */
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  .active-link::after {
+    content: "";
+    position: absolute;
+    width: 130%;
+    height: 0.95rem;
+    bottom: 0;
+    right: 50%;
+    transform: translateX(50%);
+    border-radius: 50px;
+    border: 0.18rem solid;
+    border-top: transparent;
+    border-left: transparent;
+    border-right: transparent;
+    content: var(--tw-content);
+    border-color: hsl(var(--primary));
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+      var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    --tw-drop-shadow: drop-shadow(0 20px 13px rgb(0 0 0 / 0.03))
+      drop-shadow(0 8px 5px rgb(0 0 0 / 0.08));
+    filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast)
+      var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert)
+      var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+    animation: animate-nav-link 0.25s linear;
   }
 }
 
@@ -108,6 +142,48 @@ B (255 */
   animation: automation-zoom-in 0.5s;
 }
 
+/* Hero */
+
+.hero-strap-animation-left-up-down {
+  position: absolute;
+  width: 0.25rem;
+  height: 0;
+  left: 2rem;
+  bottom: 0;
+  border-radius: 50px;
+  animation: hero-strap-animation-up-down 8s ease-in-out infinite;
+}
+
+.hero-strap-animation-right-up-down {
+  position: absolute;
+  width: 0.18rem;
+  height: 0;
+  right: 2rem;
+  bottom: 0;
+  border-radius: 50px;
+  animation: hero-strap-animation-up-down 8s 3s ease-in-out infinite;
+}
+
+.hero-strap-animation-top-right-left {
+  position: absolute;
+  width: 0%;
+  height: 0.18rem;
+  left: 0;
+  top: 10%;
+  border-radius: 50px;
+  animation: hero-strap-animation-top-left-right 8s 2s ease-in-out infinite;
+}
+
+.hero-strap-animation-top-left-right {
+  position: absolute;
+  width: 0%;
+  height: 0.18rem;
+  right: 0;
+  top: 28%;
+  border-radius: 50px;
+  animation: hero-strap-animation-top-left-right 8s 2s ease-in-out infinite;
+}
+/* Keyframes */
 @keyframes automation-zoom-in {
   0% {
     opacity: 0;
@@ -117,5 +193,46 @@ B (255 */
   100% {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+@keyframes animate-nav-link {
+  0% {
+    opacity: 0;
+    width: 0%;
+  }
+  100% {
+    opacity: 1;
+    width: 130%;
+  }
+}
+
+@keyframes hero-strap-animation-top-left-right {
+  0% {
+    opacity: 0;
+    width: 0%;
+  }
+  50% {
+    opacity: 0.2;
+    width: 100%;
+  }
+  100% {
+    opacity: 0.4;
+    width: 0%;
+  }
+}
+
+@keyframes hero-strap-animation-up-down {
+  0% {
+    opacity: 0;
+    height: 0%;
+  }
+  50% {
+    opacity: 0.2;
+    height: 100%;
+  }
+  100% {
+    opacity: 0.4;
+    height: 0%;
   }
 }
