@@ -1,15 +1,31 @@
-import mongoose from "mongoose";
+import mongoose, { Mongoose } from "mongoose";
 
-const connection: { isConnected?: number } = {};
+const DB_URL = process.env.DATABASE_URL;
 
-async function dbConnect() {
-  if (connection.isConnected) {
-    return;
-  }
-
-  const db = await mongoose.connect(process.env.DATABASE_URL);
-
-  connection.isConnected = db.connections[0].readyState;
+interface MongooseConnection {
+  con: Mongoose | null;
+  promise: Promise<Mongoose> | null
 }
 
-export default dbConnect;
+let cachedConnection: MongooseConnection = (global as any).mongoose;
+
+if (!cachedConnection) {
+  cachedConnection = (global as any).mongoose = {
+    con: null,
+    promise: null,
+  };
+}
+
+export const connect = async () => {
+  if (cachedConnection.con) return cachedConnection.con;
+
+  cachedConnection.promise =
+    cachedConnection.promise ||
+    mongoose.connect(DB_URL, {
+      dbName: "abak",
+      bufferCommands: false,
+      connectTimeoutMS: 3000,
+    });
+
+  cachedConnection.con = await cachedConnection.promise;
+};

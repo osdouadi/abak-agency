@@ -11,11 +11,11 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-      <CategoriesSection />
+     {/* <CategoriesSection />
       <GallerySection />
       <ConsultingSection />
       <BlogsSection />
-      <AgencyInfoSection />
+  <AgencyInfoSection /> */}
     </>
   );
 }

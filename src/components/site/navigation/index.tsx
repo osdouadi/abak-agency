@@ -17,14 +17,14 @@ type Props = {
 const Navigation = ({ user }: Props) => {
   const currentPath = usePathname();
   return (
-    <div className="p-4 flex items-center justify-between relative">
+    <div className="fixed top-0 right-0 left-0 p-4 flex items-center justify-between z-10">
       <aside className="flex items-center gap-2">
         <Image
           src={media.images.logos.default}
           alt="abak"
           width={1000}
           height={1000}
-          className="w-[3rem] md:w-[8rem] h-auto"
+          className="w-[5rem] md:w-[8rem] h-auto"
         />
       </aside>
       <nav className="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
