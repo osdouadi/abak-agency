@@ -5,7 +5,7 @@ type Props = {
 };
 
 const SectionSubheader: React.FC<Props> = ({ children }) => {
-  return <p className="text-xl text-muted-foreground pb-4">{children}</p>;
+  return <p className="text-lg md:text-xl text-muted-foreground pb-4">{children}</p>;
 };
 
 export default SectionSubheader;

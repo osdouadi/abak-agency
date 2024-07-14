@@ -38,8 +38,7 @@ const ContactForm = () => {
   });
   return (
     <AlertDialog>
-      <Card className="w-[70%] pb-8 mx-auto z-10 mb-10">
-     
+      <Card className="w-full md:w-[70%] pb-8 mx-auto z-10 mb-10">
         <CardHeader className="text-center">
           <CardTitle className="mb-4">معلومات الإستشارة</CardTitle>
           <CardDescription className="text-lg">
@@ -51,7 +50,7 @@ const ContactForm = () => {
         <CardContent>
           <Form {...form}>
             <form className="space-y-4">
-              <div className="w-full flex items-center gap-5">
+              <div className="w-full flex items-center flex-col md:flex-row gap-5">
                 <FormField
                   name="الإسم الكامل"
                   render={({ field }) => (
@@ -79,7 +78,7 @@ const ContactForm = () => {
                   )}
                 ></FormField>
               </div>
-              <div className="w-full flex items-center gap-5">
+              <div className="w-full flex items-center flex-col md:flex-row gap-5">
                 <FormField
                   name="الإسم الكامل"
                   render={({ field }) => (
@@ -107,16 +106,17 @@ const ContactForm = () => {
                   )}
                 ></FormField>
               </div>
-              <div className="w-full flex items-center gap-5">
+              <div className="w-full flex items-center flex-col md:flex-row gap-5">
                 <FormField
                   name=""
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel> موضوع الرسالة</FormLabel>
-                      <FormControl>
+                      <FormControl className="h-[8rem]">
                         <Input
                           readOnly
                           placeholder="موضوع الرسالة"
+                          className="h-[8rem]"
                           {...field}
                         />
                       </FormControl>
@@ -124,7 +124,7 @@ const ContactForm = () => {
                   )}
                 ></FormField>
               </div>
-              <div className="flex justify-center">
+              <div className="flex justify-center mt-5">
                 <Button className="text-white">إرسال</Button>
               </div>
             </form>

@@ -39,8 +39,8 @@ const ConsultingForm = () => {
     <AlertDialog>
       <Card className="w-full">
         <CardHeader>
-          <CardTitle className="mb-4">معلومات الإستشارة</CardTitle>
-          <CardDescription className="text-lg">
+          <CardTitle className="mb-2 md:mb-4">معلومات الإستشارة</CardTitle>
+          <CardDescription className="text-base md:text-lg">
             نحن أقرب مما تتخيل. عندك مستشار مخصص لخدمتك شخصيًا. حنّا في أباك
             نقدم لك خدمة غير مسبوقة في الاستشارات الهندسية. كلم مستشارك عن كل
             طموحاتك لتحقيق حلم مشروعك. لا تتردد، نحن جزء من تحقيق رؤيتك.
@@ -49,7 +49,7 @@ const ConsultingForm = () => {
         <CardContent>
           <Form {...form}>
             <form className="space-y-4">
-              <div className="w-full flex items-center gap-5">
+              <div className="w-full flex flex-col md:flex-row items-center gap-5">
                 <FormField
                   name="الإسم الكامل"
                   render={({ field }) => (
@@ -77,7 +77,7 @@ const ConsultingForm = () => {
                   )}
                 ></FormField>
               </div>
-              <div className="w-full flex items-center gap-5">
+              <div className="w-full flex flex-col md:flex-row items-center gap-5">
                 <FormField
                   name="الإسم الكامل"
                   render={({ field }) => (
@@ -101,7 +101,7 @@ const ConsultingForm = () => {
                   )}
                 ></FormField>
               </div>
-              <div className="w-full flex items-center gap-5">
+              <div className="w-full flex flex-col md:flex-row items-center gap-5">
                 <FormField
                   name=""
                   render={({ field }) => (

@@ -14,7 +14,7 @@ const CategoryCard: React.FC<Props> = ({title, icon}) => {
         alt="test"
         width={100}
         height={100}
-        className="w-[5rem] h-[5rem]"
+        className="w-16 h-16 md:w-[5rem] md:h-[5rem]"
       />
       <span>{title}</span>
     </div>

@@ -1,0 +1,20 @@
+{
+  "site": {
+    "header": {
+      "home": "Home",
+      "aboutUs": "About Us",
+      "blogs": "Blogs",
+      "pricing": "Pricing",
+      "recuitment": "Recruitment",
+      "contactUs": "Contact Us"
+    },
+    "homePage": {
+      "heroSectionSlogan": "We fulfill your ideas with the highest quality",
+      "categoriesSectionHeader": "Abak Office Service Categories",
+      "categoriesSectionSubheader": "We meet all your engineering needs by providing a wide range of engineering services at your disposal"
+    }
+  },
+  "callToAction": {
+    "login": "Login"
+  }
+}
