@@ -12,7 +12,7 @@ type Props = {
     | "serviceBanner"
     | "categoryIcon"
     | "categoryBanner"
-    | "projectImage"
+    | "galleryImage"
     | "blogImage";
   onChange: (url?: string) => void;
   value?: string;

@@ -1,8 +1,8 @@
 import CategoryList from "@/components/site/category/category-list";
-import CategorySectionTop from "@/components/site/category/category-section-top";
+import CategorySectionTop from "@/components/site/category/category-header-group";
 import { getEnginneringCategoryList } from "@/queries/engineering-category";
 
-const CategoriesSection = async () => {
+const CategoryContainer= async () => {
   let categoryData = [];
   let isLoading = true;
   let error = null;
@@ -28,4 +28,4 @@ const CategoriesSection = async () => {
   );
 };
 
-export default CategoriesSection;
+export default CategoryContainer;

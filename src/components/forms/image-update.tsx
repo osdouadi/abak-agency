@@ -29,28 +29,22 @@ import BtnLoading from "../global/btn-loading";
 import Link from "next/link";
 import { Undo2 } from "lucide-react";
 import { Switch } from "../ui/switch";
-import { ProjectImageSchema } from "@/lib/zod-schema/project-image";
-import {
-  getProjectImageById,
-  updateProjectImage,
-} from "@/queries/project-image";
+import { ImageSchema } from "@/lib/zod-schema/image";
+import { getImageById, updateImage } from "@/queries/gallery";
 import { useExtractIdFromPath } from "@/hooks/useExtractIdFromPath";
-import { ProjectImageData } from "@/types/project-image-data";
+import { ImageData } from "@/types/image-data";
 
 const ImageUpdate = () => {
-  const [projectImageData, setProjectImageData] = useState<ProjectImageData | null>(
-    null
-  );
+  const [imageData, setImageData] = useState<ImageData | null>(null);
   const { id } = useExtractIdFromPath();
   const { toast } = useToast();
 
   useEffect(() => {
-    const fetchProjectImageData = async (id: string) => {
+    const fetchImageData = async (id: string) => {
       try {
-        const response = await getProjectImageById(id);
-        const parsedResponse = JSON.parse(response);
+        const response = await getImageById(id);
 
-        setProjectImageData(parsedResponse);
+        setImageData(response);
       } catch (error) {
         toast({
           variant: "destructive",
@@ -60,34 +54,40 @@ const ImageUpdate = () => {
       }
     };
 
-    fetchProjectImageData(id ?? "");
+    fetchImageData(id ?? "");
   }, [id, toast]);
 
-  const form = useForm<z.infer<typeof ProjectImageSchema>>({
+  const form = useForm<z.infer<typeof ImageSchema>>({
     mode: "onChange",
-    resolver: zodResolver(ProjectImageSchema),
+    resolver: zodResolver(ImageSchema),
     defaultValues: {
-      projectImage: "",
-      title: "",
+      galleryImage: "",
+      title: {
+        ar: "",
+        en: "",
+      },
       isDisabled: false,
     },
   });
 
   useEffect(() => {
-    if (projectImageData) {
+    if (imageData) {
       form.reset({
-        title: projectImageData?.title || "",
-        projectImage: projectImageData?.projectImage || "",
-        isDisabled: projectImageData?.isDisabled || false,
+        title: {
+          ar: imageData?.title.ar || "",
+          en: imageData?.title.en || "",
+        },
+        galleryImage: imageData?.galleryImage || "",
+        isDisabled: imageData?.isDisabled || false,
       });
     }
-  }, [projectImageData, form]);
+  }, [imageData, form]);
 
   const isPending = form.formState.isSubmitting;
 
-  const onSubmit = async (values: z.infer<typeof ProjectImageSchema>) => {
+  const onSubmit = async (values: z.infer<typeof ImageSchema>) => {
     try {
-      await updateProjectImage(id ?? "", values);
+      await updateImage(id ?? "", values);
       toast({
         title: "تعديل الصورة بنجاح",
       });
@@ -125,14 +125,14 @@ const ImageUpdate = () => {
                 <div className="w-1/2">
                   <FormField
                     disabled={isPending}
-                    name="projectImage"
+                    name="galleryImage"
                     control={form.control}
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel>صورة المشروع </FormLabel>
                         <FormControl>
                           <FileUpload
-                            apiEndpoint="projectImage"
+                            apiEndpoint="galleryImage"
                             onChange={field.onChange}
                             value={field.value}
                           />
@@ -146,7 +146,21 @@ const ImageUpdate = () => {
                   <FormField
                     disabled={isPending}
                     control={form.control}
-                    name="title"
+                    name="title.ar"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormLabel>عنوان المشروع</FormLabel>
+                        <FormControl>
+                          <Input placeholder="عنوان المشروع" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    disabled={isPending}
+                    control={form.control}
+                    name="title.en"
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel>عنوان المشروع</FormLabel>

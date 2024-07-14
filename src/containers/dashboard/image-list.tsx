@@ -1,6 +1,6 @@
 "use client";
 
-import { projectImageColumns } from "@/components/dashboard/data-table/project-image-columns";
+import { imageColumns } from "@/components/dashboard/data-table/image-columns";
 import { DataTable } from "@/components/dashboard/services/data-table";
 import {
   DropdownMenu,
@@ -9,23 +9,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/components/ui/use-toast";
-import { deleteProjectImageList } from "@/queries/project-image";
+import { deleteGallery } from "@/queries/gallery";
 import { ChevronDown, Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-export type ProjectImageListProps = {
-  data: any;
+export type ImageListProps = {
+  galleryData: any;
 };
 
-const ProjectImageList: React.FC<ProjectImageListProps> = ({ data }) => {
+const ImageList: React.FC<ImageListProps> = ({ galleryData }) => {
   const { toast } = useToast();
   const router = useRouter();
 
-  const handleDeleteProjectImageList = async () => {
+  const handleDeleteGallery = async () => {
     try {
-      await deleteProjectImageList();
+      await deleteGallery();
       toast({
         title: "حذف جميع الصورة بنجاح",
       });
@@ -58,15 +58,13 @@ const ProjectImageList: React.FC<ProjectImageListProps> = ({ data }) => {
             </DropdownMenuTrigger>
             <DropdownMenuContent className="px-3">
               <DropdownMenuItem
-                onClick={() => handleDeleteProjectImageList()}
+                onClick={() => handleDeleteGallery()}
                 className="cursor-pointer w-full flex justify-end py-1.5"
               >
                 حذف جميع الصور
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer w-full flex justify-end py-1.5">
-                <Link href={"/admin-dashboard/gallery"}>
-                  الصور
-                </Link>
+                <Link href={"/admin-dashboard/gallery"}>الصور</Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -76,10 +74,10 @@ const ProjectImageList: React.FC<ProjectImageListProps> = ({ data }) => {
         <h2 className="md:text-2xl"> جميع صور المكتب</h2>
       </div>
       <div className="mx-auto">
-        <DataTable columns={projectImageColumns} data={JSON.parse(data)} />
+        <DataTable columns={imageColumns} data={galleryData} />
       </div>
     </>
   );
 };
 
-export default ProjectImageList;
+export default ImageList;

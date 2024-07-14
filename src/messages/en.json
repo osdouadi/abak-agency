@@ -9,7 +9,9 @@
       "contactUs": "Contact Us"
     },
     "homePage": {
-      "heroSectionSlogan": "We fulfill your ideas with the highest quality",
+      "heroSectionSlogan": "We fulfill your ideas with the highest quality"
+    },
+    "headerGroups": {
       "categoriesSectionHeader": "Abak Office Service Categories",
       "categoriesSectionSubheader": "We meet all your engineering needs by providing a wide range of engineering services at your disposal"
     }

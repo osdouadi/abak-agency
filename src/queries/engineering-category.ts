@@ -23,7 +23,7 @@ export const getEngineeringCategoryById = async (categoryId: string) => {
       categoryId
     );
 
-    return JSON.stringify(engineeringCategoryById);
+    return JSON.parse(JSON.stringify(engineeringCategoryById));
   } catch (error: any) {
     throw new Error(error.message || "Failed to fetch get category details");
   }
@@ -55,7 +55,7 @@ export const createEngineeringCategory = async (categoryData: CategoryData) => {
         },
       },
     });
-    return JSON.stringify(engineeringCategoryDetails);
+    return JSON.parse(JSON.stringify(engineeringCategoryDetails));
   } catch (error: any) {
     throw new Error(error.message || "Failed to create category");
   }
@@ -72,7 +72,7 @@ export const updateEngineeringCategory = async (
       await EngineeringCategory.findByIdAndUpdate(categoryId, categoryData, {
         new: true,
       });
-    return JSON.stringify(engineeringCategoryDetails);
+    return JSON.parse(JSON.stringify(engineeringCategoryDetails));
   } catch (error: any) {
     throw new Error(error.message || "Failed to update category");
   }
@@ -84,7 +84,7 @@ export const deleteEngineeringCategory = async (categoryId: string) => {
   try {
     const engineeringCategoryDetails =
       await EngineeringCategory.findByIdAndDelete(categoryId);
-    return JSON.stringify(engineeringCategoryDetails);
+    return JSON.parse(JSON.stringify(engineeringCategoryDetails));
   } catch (error: any) {
     throw new Error(error.message || "Failed to delete category");
   }

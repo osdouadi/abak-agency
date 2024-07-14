@@ -1,0 +1,66 @@
+{
+  "site": {
+    "header": {
+      "home": "الرئيسية",
+      "aboutUs": "من نحن",
+      "blogs": "المدونة",
+      "pricing": "التسعير",
+      "recuitment": "التوظيف",
+      "contactUs": "تواصل معنا"
+    },
+    "homePage": {
+      "heroSectionSlogan": "نلبي أفكارك بأعلى جودة",
+      "cardFeatureAppointmentTitle": "احجز موعد يناسبك",
+      "cardFeatureNotificationTitle": "اتلقى إشعار الإجتماع",
+      "cardFeatureMeetingTitle": "إجتماعك عبر الإنترنت",
+      "cardFeatureAppointmentDescription": "عبي إستمارة البيانات و اختار توقيت إجتماع تشوفه مناسب",
+      "cardFeatureSatisfactionTitle": "رضاك اكثر ما يهمنا",
+      "cardFeatureNotificationDescription": "فريقنا رح يدرس طلبك و يرسلك إشعار في أقرب وقت",
+      "cardFeatureMeetingDescription": "مستشارنا رح يقدملك الإستشارة عن بعد",
+      "cardFeatureSatisfactionDescription": "خبرائنا يخلوا كل استفساراتك عندها حلول"
+    },
+    "headerGroups": {
+      "categoriesHeader": "أقسام خدمات مكتب أباك",
+      "categoriesSubheader": "نلبي جميع إحتياجاتكم الهندسية عن طريق توفير مجموعة واسعة من الخدمات الهندسية تحت تصرفكم",
+      "consultingHeader": "من بيتك تتواصل مع خبير من أباك",
+      "consultingSubheader": "أباك تنسيك همومك الهندسية, فريقنا جاهز لتلقي إنشغالاتك و تقديم الإستشارة المناسبة لك."
+    },
+    "form": {
+      "formContent": {
+        "consulting": {
+          "header": "بيانات الإستشارة",
+          "subheader": "نحن أقرب مما تتخيل. عندك مستشار مخصص لخدمتك شخصيًا. حنّا في أباك نقدم لك خدمة غير مسبوقة في الاستشارات الهندسية. كلم مستشارك عن كل  طموحاتك لتحقيق حلم مشروعك. لا تتردد، نحن جزء من تحقيق رؤيتك."
+        }
+      },
+      "formInput": {
+        "fullName": "الإسم الكامل",
+        "email": "البريد الإلكتروني",
+        "phoneNumber": "رقم الهاتف",
+        "city": "المدينة",
+        "address": "العنوان",
+        "specifyingDate": "تحديد موعد",
+        "pleaseSpecifyConvinientDate": "الرجاء إختيار موعد مناسب"
+      }
+    }
+  },
+  "callToAction": {
+    "login": "تسجيل الدخول",
+    "backToBlogs": "عودة إلى المقالات"
+  },
+  "responses": {
+    "orderSent": "تم إرسال الطلب",
+    "sendingOrderFailed": "فشل إرسال الطلب",
+    "pleaseTryAgain": "!الرجاء المحاولة مرة اخرى",
+    "bloggAddSuccussfully": "تم إضافة المقال بنجاح"
+  },
+  "dashboard": {
+    "blogs": {
+      "blogDetailsCardTitle": "البيانات الأساسية للمقال",
+      "blogDetailsCardDescription": "يرجى إدخال المعلومات التالية بشكل صحيح لإنشاء مقال جديد.",
+      "blogImageLabel": " إضافة صورة معبرة للمقال",
+      "blogTitle": "عنوان المقال",
+      "blogTitleEn": "عنوان المقال باللغة الإنجليزية",
+      "blogTitleEn": "عنوان المقال باللغة الإنجليزية"
+    }
+  }
+}

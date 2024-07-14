@@ -2,7 +2,6 @@ import mongoose, { Document, Schema, Types } from "mongoose";
 
 export interface IEngineeringService extends Document {
   _id: Types.ObjectId;
-  id: string;
   title: {
     ar: string;
     en: string;

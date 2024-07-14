@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { AlertDialog } from "../ui/alert-dialog";
 import {
@@ -8,68 +10,138 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import { useToast } from "../ui/use-toast";
+import BtnLoading from "../global/btn-loading";
 
 import * as z from "zod";
-import { Input } from "../ui/input";
 
-const FormSchema = z.object({
-  fullName: z
-    .string()
-    .min(2, { message: "إسم المستخدم يجب أن لا يقل عن حرفين." }),
-  userEmail: z.string().min(1, { message: "يجب إدخال بريد إلكتروني صالح." }),
-  phoneNumber: z.string().min(1, { message: "يجب إدخال بريد إلكتروني صالح." }),
-  city: z.string().min(1, { message: "يجب إدخال المدينة." }),
-  address: z.string().min(1, { message: "يجب إدخال العنوان." }),
-  date: z
-    .string()
-    .min(1, { message: "يجب إدخال الموعد المناسب للإجتماع مع مستشار." }),
-  addtionalNote: z
-    .string()
-    .min(1, { message: "الملاحضات الإضافية لا تقل عن حرف واحد" }),
-});
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
+
+import { ConsultingOrderSchema } from "@/lib/zod-schema/consulting-order-schema";
+import { createConsultingOrder } from "@/queries/consulting-order";
 
 const ConsultingForm = () => {
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const tFormContent = useTranslations("site.form.formContent.consulting");
+  const tFormInput = useTranslations("site.form.formInput");
+  const tResponses = useTranslations("responses");
+  const { toast } = useToast();
+
+  const form = useForm<z.infer<typeof ConsultingOrderSchema>>({
     mode: "onChange",
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(ConsultingOrderSchema),
   });
+
+  const isPending = form.formState.isSubmitting;
+
+  const onSubmit = async (values: z.infer<typeof ConsultingOrderSchema>) => {
+    try {
+      await createConsultingOrder(values);
+      toast({
+        title: tResponses("orderSent"),
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: tResponses("sendingOrderFailed"),
+        description: tResponses("pleaseTryAgain"),
+      });
+    }
+  };
+
   return (
     <AlertDialog>
       <Card className="w-full">
         <CardHeader>
-          <CardTitle className="mb-2 md:mb-4">معلومات الإستشارة</CardTitle>
+          <CardTitle className="mb-2 md:mb-4">
+            {tFormContent("header")}
+          </CardTitle>
           <CardDescription className="text-base md:text-lg">
-            نحن أقرب مما تتخيل. عندك مستشار مخصص لخدمتك شخصيًا. حنّا في أباك
-            نقدم لك خدمة غير مسبوقة في الاستشارات الهندسية. كلم مستشارك عن كل
-            طموحاتك لتحقيق حلم مشروعك. لا تتردد، نحن جزء من تحقيق رؤيتك.
+            {tFormContent("subheader")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <div className="w-full flex flex-col md:flex-row items-center gap-5">
                 <FormField
-                  name="الإسم الكامل"
+                  name="fullName"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>الإسم الكامل</FormLabel>
+                      <FormLabel>{tFormInput("fullName")}</FormLabel>
                       <FormControl>
-                        <Input readOnly placeholder="الإسم الكامل" {...field} />
+                        <Input
+                          placeholder={tFormInput("fullName")}
+                          {...field}
+                        />
                       </FormControl>
                     </FormItem>
                   )}
                 ></FormField>
                 <FormField
-                  name="البريد الإلكتروني"
+                  name="email"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>البريد الإلكتروني</FormLabel>
+                      <FormLabel>{tFormInput("email")}</FormLabel>
+                      <FormControl>
+                        <Input placeholder={tFormInput("email")} {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                ></FormField>
+              </div>
+              <div className="w-full flex flex-col md:flex-row items-center gap-5">
+                <FormField
+                  name="phoneNumber"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>{tFormInput("phoneNumber")}</FormLabel>
                       <FormControl>
                         <Input
-                          readOnly
-                          placeholder="البريد الإلكتروني"
+                          placeholder={tFormInput("phoneNumber")}
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                ></FormField>
+                <FormField
+                  name="city"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>{tFormInput("city")}</FormLabel>
+                      <FormControl>
+                        <Input placeholder={tFormInput("city")} {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                ></FormField>
+              </div>
+              <div className="w-full flex flex-col md:flex-row items-center gap-5">
+                <FormField
+                  name="address"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel> {tFormInput("address")}</FormLabel>
+                      <FormControl>
+                        <Input placeholder={tFormInput("address")} {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                ></FormField>
+                <FormField
+                  name="date"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>{tFormInput("specifyingDate")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={tFormInput(
+                            "pleaseSpecifyConvinientDate"
+                          )}
                           {...field}
                         />
                       </FormControl>
@@ -77,53 +149,15 @@ const ConsultingForm = () => {
                   )}
                 ></FormField>
               </div>
-              <div className="w-full flex flex-col md:flex-row items-center gap-5">
-                <FormField
-                  name="الإسم الكامل"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>رقم الهاتف</FormLabel>
-                      <FormControl>
-                        <Input readOnly placeholder="رقم الهاتف" {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                ></FormField>
-                <FormField
-                  name="الإسم الكامل"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>المدينة</FormLabel>
-                      <FormControl>
-                        <Input readOnly placeholder="المدينة" {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                ></FormField>
-              </div>
-              <div className="w-full flex flex-col md:flex-row items-center gap-5">
-                <FormField
-                  name=""
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel> العنوان</FormLabel>
-                      <FormControl>
-                        <Input readOnly placeholder="العنوان" {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                ></FormField>
-                <FormField
-                  name="الإسم الكامل"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>تحديد موعد</FormLabel>
-                      <FormControl>
-                        <Input readOnly placeholder="تحديد موعد" {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                ></FormField>
+              <div className="flex justify-center">
+                <Button
+                  disabled={isPending}
+                  type="submit"
+                  className="text-white"
+                  size={"lg"}
+                >
+                  {isPending ? <BtnLoading /> : "إرسال الطلب"}
+                </Button>
               </div>
             </form>
           </Form>

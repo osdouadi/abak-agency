@@ -25,23 +25,23 @@ const navigationLinks = [
 
 const consultingServiceFeatures = [
   {
-    title: "احجز موعد يناسبك",
-    description: "عبي إستمارة البيانات و اختار توقيت إجتماع تشوفه مناسب",
+    title: "cardFeatureAppointmentTitle",
+    description: "cardFeatureAppointmentDescription",
     icon: CalendarCheck2,
   },
   {
-    title: "اتلقى إشعار الإجتماع",
-    description: "فريقنا رح يدرس طلبك و يرسلك إشعار في أقرب وقت",
+    title: "cardFeatureNotificationTitle",
+    description: "cardFeatureNotificationDescription",
     icon: BellRing,
   },
   {
-    title: "إجتماعك عبر الإنترنت",
-    description: "مستشارنا رح يقدملك الإستشارة عن بعد",
+    title: "cardFeatureMeetingTitle",
+    description: "cardFeatureMeetingDescription",
     icon: Video,
   },
   {
-    title: "رضاك اكثر ما يهمنا",
-    description: "خبرائنا يخلوا كل استفساراتك عندها حلول",
+    title: "cardFeatureSatisfactionTitle",
+    description: "cardFeatureSatisfactionDescription",
     icon: MessageCircleQuestion,
   },
 ];

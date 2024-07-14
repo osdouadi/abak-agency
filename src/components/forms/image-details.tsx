@@ -29,27 +29,30 @@ import BtnLoading from "../global/btn-loading";
 import Link from "next/link";
 import { Undo2 } from "lucide-react";
 import { Switch } from "../ui/switch";
-import { ProjectImageSchema } from "@/lib/zod-schema/project-image";
-import { createProjectImage } from "@/queries/project-image";
+import { ImageSchema } from "@/lib/zod-schema/image";
+import { createImage } from "@/queries/gallery";
 
 const ImageDetails = () => {
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof ProjectImageSchema>>({
+  const form = useForm<z.infer<typeof ImageSchema>>({
     mode: "onChange",
-    resolver: zodResolver(ProjectImageSchema),
+    resolver: zodResolver(ImageSchema),
     defaultValues: {
-      projectImage: "",
-      title: "",
+      galleryImage: "",
+      title: {
+        ar: "",
+        en: "",
+      },
       isDisabled: false,
     },
   });
 
   const isPending = form.formState.isSubmitting;
 
-  const onSubmit = async (values: z.infer<typeof ProjectImageSchema>) => {
+  const onSubmit = async (values: z.infer<typeof ImageSchema>) => {
     try {
-      await createProjectImage(values);
+      await createImage(values);
       toast({
         title: "إنشاء التصنيف بنجاح",
       });
@@ -87,14 +90,14 @@ const ImageDetails = () => {
                 <div className="w-1/2">
                   <FormField
                     disabled={isPending}
-                    name="projectImage"
+                    name="galleryImage"
                     control={form.control}
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel>صورة المشروع </FormLabel>
                         <FormControl>
                           <FileUpload
-                            apiEndpoint="projectImage"
+                            apiEndpoint="galleryImage"
                             onChange={field.onChange}
                             value={field.value}
                           />
@@ -108,12 +111,29 @@ const ImageDetails = () => {
                   <FormField
                     disabled={isPending}
                     control={form.control}
-                    name="title"
+                    name="title.ar"
                     render={({ field }) => (
                       <FormItem className="w-full">
                         <FormLabel>عنوان المشروع</FormLabel>
                         <FormControl>
                           <Input placeholder="عنوان المشروع" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    disabled={isPending}
+                    control={form.control}
+                    name="title.en"
+                    render={({ field }) => (
+                      <FormItem className="w-full">
+                        <FormLabel>عنوان الصورة بالإنجليزية</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="عنوان الصورة بالإنجليزية"
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

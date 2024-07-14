@@ -15,10 +15,10 @@ import Link from "next/link";
 import { formatDate } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import { ProjectImage } from "@/types/project-image";
-import { deleteProjectImage } from "@/queries/project-image";
+import { deleteImage } from "@/queries/gallery";
+import { Image } from "@/types/image";
 
-export const projectImageColumns: ColumnDef<ProjectImage>[] = [
+export const imageColumns: ColumnDef<Image>[] = [
   {
     accessorKey: "title",
     header: "عنوان الصورة",
@@ -36,13 +36,13 @@ export const projectImageColumns: ColumnDef<ProjectImage>[] = [
     header: "الاجراءات",
     id: "actions",
     cell: ({ row }) => {
-      const projectImage = row.original;
+      const image = row.original;
       const router = useRouter();
       const { toast } = useToast();
 
-      const handleDeleteProjectImageById = async (projectImageId: string) => {
+      const handleDeleteImageById = async (imageId: string) => {
         try {
-          await deleteProjectImage(projectImageId);
+          await deleteImage(imageId);
           router.refresh();
           toast({
             title: "حذف الصورة بنجاح",
@@ -68,17 +68,17 @@ export const projectImageColumns: ColumnDef<ProjectImage>[] = [
             <DropdownMenuLabel>الإجراءات</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href={`/admin-dashboard/gallery/${projectImage.id}`}>
+              <Link href={`/admin-dashboard/gallery/${image.id}`}>
                 عرض معلومات الصورة
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem>
-              <Link href={`/admin-dashboard/gallery/update/${projectImage.id}`}>
+              <Link href={`/admin-dashboard/gallery/update/${image.id}`}>
                 تعديل الصورة
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => handleDeleteProjectImageById(projectImage?.id)}
+              onClick={() => handleDeleteImageById(image?.id)}
               className="cursor-pointer"
             >
               حذف الصورة

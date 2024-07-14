@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import React from 'react'
 
-const HeroSection = () => {
+const HeroContainer = () => {
   const tHomePage = useTranslations("site.homePage")
   const locale  = useExtractLocaleFromPath()
 
@@ -43,4 +43,4 @@ const HeroSection = () => {
   );
 }
 
-export default HeroSection;
+export default HeroContainer;

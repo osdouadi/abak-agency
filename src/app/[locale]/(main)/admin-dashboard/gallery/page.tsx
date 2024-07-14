@@ -1,11 +1,11 @@
-import ProjectImageList from "@/containers/dashboard/project-image-list";
-import { getProjectImageList } from "@/queries/project-image";
+import ProjectImageList from "@/containers/dashboard/image-list";
+import { getGallery } from "@/queries/gallery";
 
 const page = async () => {
-  const data = await getProjectImageList();
+  const galleryData = await getGallery();
   return (
     <>
-      <ProjectImageList data={data} />
+      <ProjectImageList galleryData={galleryData} />
     </>
   );
 };

@@ -6,6 +6,7 @@ import { useExtractLocaleFromPath } from "@/hooks/useExtractLocaleFromPath";
 import { SkeletonCard } from "@/components/global/skeleton-card";
 
 type Category = {
+  id: string;
   title: {
     ar: string;
     en: string;
@@ -35,7 +36,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
           <SkeletonCard />
         </div>
       ) : error ? (
-        <div>Error: {error.message}</div>
+        <div>Somthing went wrong</div>
       ) : (
         categories.map((item, index) => (
           <CategoryCard
