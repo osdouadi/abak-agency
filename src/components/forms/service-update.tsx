@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
+
 import { AlertDialog } from "../ui/alert-dialog";
 import {
   Card,
@@ -17,22 +19,6 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import FileUpload from "../global/file-upload";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { useToast } from "../ui/use-toast";
-import { Button } from "../ui/button";
-import InputGroup from "../global/input-group";
-import BtnLoading from "../global/btn-loading";
-import Link from "next/link";
-import { Undo2 } from "lucide-react";
-import {
-  getEngineeringServiceById,
-  updateEngineeringService,
-} from "@/queries/engineering-service";
 import {
   Select,
   SelectContent,
@@ -40,15 +26,43 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import InputGroup from "../global/input-group";
+import BtnLoading from "../global/btn-loading";
+
+import FileUpload from "../global/file-upload";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Button } from "../ui/button";
+import { Undo2 } from "lucide-react";
+
+import { useForm } from "react-hook-form";
+import { useToast } from "../ui/use-toast";
+import { useExtractIdFromPath } from "@/hooks/useExtractIdFromPath";
+
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import {
+  getEngineeringServiceById,
+  updateEngineeringService,
+} from "@/queries/engineering-service";
+
 import { getEnginneringCategoryList } from "@/queries/engineering-category";
 import { Category } from "@/types/category";
 import { ServiceSchema } from "@/lib/zod-schema/service-schema";
 import { ServiceData } from "@/types/service-data";
-import { useExtractIdFromPath } from "@/hooks/useExtractIdFromPath";
+import { useTranslations } from "next-intl";
+import { constants } from "@/config/constants";
 
 const ServiceUpdate = () => {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [serviceData, setServiceData] = useState<ServiceData | null>(null);
+
+  const tDashboardEngineeringService = useTranslations(
+    "dashboard.engineeringService"
+  );
+  const tResponse = useTranslations("responses");
+  const tCallToAction = useTranslations("callToAction");
   const { id } = useExtractIdFromPath();
   const { toast } = useToast();
 
@@ -56,9 +70,8 @@ const ServiceUpdate = () => {
     const fetchServiceData = async (id: string) => {
       try {
         const response = await getEngineeringServiceById(id);
-        const parsedResponse = JSON.parse(response);
 
-        setServiceData(parsedResponse);
+        setServiceData(response);
       } catch (error) {
         toast({
           variant: "destructive",
@@ -75,7 +88,7 @@ const ServiceUpdate = () => {
     mode: "onChange",
     resolver: zodResolver(ServiceSchema),
   });
-  
+
   useEffect(() => {
     if (serviceData) {
       form.reset({
@@ -110,10 +123,8 @@ const ServiceUpdate = () => {
     const fetchCategoryList = async () => {
       try {
         const response = await getEnginneringCategoryList();
-        const parsedResponse = JSON.parse(response);
-
-        if (parsedResponse) {
-          setCategoryList(parsedResponse);
+        if (response) {
+          setCategoryList(response);
         }
       } catch (error) {
         console.log(error);
@@ -145,16 +156,22 @@ const ServiceUpdate = () => {
           <Card>
             <CardHeader className="w-full flex flex-row justify-between">
               <div>
-                <CardTitle>البيانات الأساسية للخدمة</CardTitle>
+                <CardTitle>
+                  {tDashboardEngineeringService(
+                    "editingEngineeringServiceMainDetails"
+                  )}
+                </CardTitle>
                 <CardDescription>
-                  يجب إدخال المعلومات التالية من أجل إنشاء خدمة جديدة
+                  {tDashboardEngineeringService(
+                    "editingEngineeringServiceMainDetailsDescription"
+                  )}
                 </CardDescription>
               </div>
               <Link
-                href={"/admin-dashboard/engineering-services"}
+                href={constants.links.adminEngineeringServices}
                 className="bg-transparent hover:bg-primary transform transition-all text-primary font-medium hover:text-white py-2 px-4 border border-primary hover:border-transparent rounded flex items-center gap-1.5"
               >
-                عودة الى الخدمات
+                {tCallToAction("backToEngineeringServices")}
                 <Undo2 strokeWidth={1.4} className="mb-1" />
               </Link>
             </CardHeader>
@@ -166,7 +183,11 @@ const ServiceUpdate = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>أيقونة الخدمة الهندسي</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService(
+                          "editingEngineeringServiceIcon"
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <FileUpload
                           apiEndpoint="serviceIcon"
@@ -184,7 +205,11 @@ const ServiceUpdate = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>صورة التصنيف الهندسي</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService(
+                          "editingEngineeringServiceBanner"
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <FileUpload
                           apiEndpoint="serviceBanner"
@@ -204,9 +229,18 @@ const ServiceUpdate = () => {
                   name="title.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان الخدمة</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService(
+                          "editingEngineeringServiceTitleAR"
+                        )}
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="عنوان الخدمة" {...field} />
+                        <Input
+                          placeholder={tDashboardEngineeringService(
+                            "editingEngineeringServiceTitleAR"
+                          )}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -218,10 +252,16 @@ const ServiceUpdate = () => {
                   name="title.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان الخدمة باللغة الإنجليزية</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService(
+                          "editingEngineeringServiceTitleEN"
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="عنوان الخدمة باللغة الإنجليزية"
+                          placeholder={tDashboardEngineeringService(
+                            "editingEngineeringServiceTitleEN"
+                          )}
                           {...field}
                         />
                       </FormControl>
@@ -234,13 +274,19 @@ const ServiceUpdate = () => {
                 <FormField
                   disabled={isPending}
                   control={form.control}
-                  name="SEOSettings.pageTitle.ar"
+                  name="description.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف الخدمة</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService(
+                          "editingEngineeringServiceDescriptionAR"
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف الخدمة"
+                          placeholder={tDashboardEngineeringService(
+                            "editingEngineeringServiceDescriptionAR"
+                          )}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -252,13 +298,19 @@ const ServiceUpdate = () => {
                 <FormField
                   disabled={isPending}
                   control={form.control}
-                  name="SEOSettings.pageTitle.en"
+                  name="description.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف الخدمة باللغة الإنجليزية</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService(
+                          "editingEngineeringServiceDescriptionEN"
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف التصنيف باللغة الإنجليزية"
+                          placeholder={tDashboardEngineeringService(
+                            "editingEngineeringServiceDescriptionEN"
+                          )}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -273,14 +325,22 @@ const ServiceUpdate = () => {
                 name="category"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>تصنيف الخدمة</FormLabel>
+                    <FormLabel>
+                      {tDashboardEngineeringService(
+                        "editingEngineeringServiceCategory"
+                      )}
+                    </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="تعديل تصنيف الخدمة" />
+                          <SelectValue
+                            placeholder={tDashboardEngineeringService(
+                              "editingEngineeringServiceCategory"
+                            )}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -300,9 +360,11 @@ const ServiceUpdate = () => {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>إعدادات السيو</CardTitle>
+              <CardTitle>
+                {tDashboardEngineeringService("editingSEOSettings")}
+              </CardTitle>
               <CardDescription>
-                اعدادات خاصة بتحسين محركات البحث الخصة بصفحة الخدمة
+                {tDashboardEngineeringService("editingSEOSettingsDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -310,12 +372,19 @@ const ServiceUpdate = () => {
                 <FormField
                   disabled={isPending}
                   control={form.control}
-                  name="SEOSettings.pageDescription.ar"
+                  name="SEOSettings.pageTitle.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان صفحة الحدمة</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService("editingPageTitleAR")}
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="عنوان صفحة الخدمة" {...field} />
+                        <Input
+                          placeholder={tDashboardEngineeringService(
+                            "editingPageTitleAR"
+                          )}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -324,13 +393,17 @@ const ServiceUpdate = () => {
                 <FormField
                   disabled={isPending}
                   control={form.control}
-                  name="SEOSettings.pageDescription.en"
+                  name="SEOSettings.pageTitle.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان صفحة الخدمة باللغة الإنجليزية</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService("editingPageTitleAR")}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="عنوان صفحة الخدمة باللغة الإنجليزية"
+                          placeholder={tDashboardEngineeringService(
+                            "editingPageTitleEN"
+                          )}
                           {...field}
                         />
                       </FormControl>
@@ -346,10 +419,16 @@ const ServiceUpdate = () => {
                   name="description.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف صفحة الخدمة</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService(
+                          "editingPageDescriptionAR"
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف صفحة الخدمة"
+                          placeholder={tDashboardEngineeringService(
+                            "editingPageDescriptionAR"
+                          )}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -364,10 +443,16 @@ const ServiceUpdate = () => {
                   name="description.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف صفحة التصنيف باللغة الإنجليزية</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService(
+                          "editingPageDescriptionEN"
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف صفحة التصنيف باللغة الإنجليزية"
+                          placeholder={tDashboardEngineeringService(
+                            "editingPageDescriptionEN"
+                          )}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -386,7 +471,7 @@ const ServiceUpdate = () => {
               className="text-white"
               size={"lg"}
             >
-              {isPending ? <BtnLoading /> : "حفظ التعديلات"}
+              {isPending ? <BtnLoading /> : tCallToAction("saveEdits")}
             </Button>
           </div>
         </form>

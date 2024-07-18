@@ -41,6 +41,7 @@ const CategoryList: React.FC<CategoryListProps> = ({
         categories.map((item, index) => (
           <CategoryCard
             key={index}
+            id={item.id}
             title={locale === "ar" ? item.title.ar : item.title.en}
             icon={item.categoryIcon}
           />

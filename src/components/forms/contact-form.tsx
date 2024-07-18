@@ -1,4 +1,7 @@
+"use client";
+
 import React from "react";
+
 import { AlertDialog } from "../ui/alert-dialog";
 import {
   Card,
@@ -8,124 +11,151 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "../ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import * as z from "zod";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import BtnLoading from "../global/btn-loading";
 
-const FormSchema = z.object({
-  fullName: z
-    .string()
-    .min(2, { message: "إسم المستخدم يجب أن لا يقل عن حرفين." }),
-  userEmail: z.string().min(1, { message: "يجب إدخال بريد إلكتروني صالح." }),
-  phoneNumber: z.string().min(1, { message: "يجب إدخال بريد إلكتروني صالح." }),
-  city: z.string().min(1, { message: "يجب إدخال المدينة." }),
-  address: z.string().min(1, { message: "يجب إدخال العنوان." }),
-  date: z
-    .string()
-    .min(1, { message: "يجب إدخال الموعد المناسب للإجتماع مع مستشار." }),
-  addtionalNote: z
-    .string()
-    .min(1, { message: "الملاحضات الإضافية لا تقل عن حرف واحد" }),
-});
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useForm } from "react-hook-form";
+import { useTranslations } from "next-intl";
+import { useToast } from "../ui/use-toast";
+
+import { ContactSchema } from "@/lib/zod-schema/contact-schema";
+import { createContact } from "@/queries/contact";
 
 const ContactForm = () => {
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const tFormContent = useTranslations("site.form.formContent.contact");
+  const tFormInput = useTranslations("site.form.formInput");
+  const tResponses = useTranslations("responses");
+  const tCallToAction = useTranslations("callToAction");
+  const { toast } = useToast();
+
+  const form = useForm<z.infer<typeof ContactSchema>>({
     mode: "onChange",
-    resolver: zodResolver(FormSchema),
+    resolver: zodResolver(ContactSchema),
+    defaultValues: {
+      fullName: "",
+      email: "",
+      phoneNumber: "",
+      letterTitle: "",
+      letterSubject: "",
+    },
   });
+
+  const isPending = form.formState.isSubmitting;
+
+  const onSubmit = async (values: z.infer<typeof ContactSchema>) => {
+    try {
+      await createContact(values);
+      toast({
+        title: tResponses("orderSent"),
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: tResponses("sendingOrderFailed"),
+        description: tResponses("pleaseTryAgain"),
+      });
+    }
+  };
+
   return (
     <AlertDialog>
-      <Card className="w-full md:w-[70%] pb-8 mx-auto z-10 mb-10">
-        <CardHeader className="text-center">
-          <CardTitle className="mb-4">معلومات الإستشارة</CardTitle>
-          <CardDescription className="text-lg">
-            نحن أقرب مما تتخيل. عندك مستشار مخصص لخدمتك شخصيًا. حنّا في أباك
-            نقدم لك خدمة غير مسبوقة في الاستشارات الهندسية. كلم مستشارك عن كل
-            طموحاتك لتحقيق حلم مشروعك. لا تتردد، نحن جزء من تحقيق رؤيتك.
+      <Card className="w-full">
+        <CardHeader className="text-center md:text-start">
+          <CardTitle>{tFormContent("header")}</CardTitle>
+          <CardDescription className="text-base md:text-lg">
+            {tFormContent("subheader")}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <div className="w-full flex items-center flex-col md:flex-row gap-5">
                 <FormField
-                  name="الإسم الكامل"
+                  name="fullName"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>الإسم الكامل</FormLabel>
-                      <FormControl>
-                        <Input readOnly placeholder="الإسم الكامل" {...field} />
-                      </FormControl>
-                    </FormItem>
-                  )}
-                ></FormField>
-                <FormField
-                  name="البريد الإلكتروني"
-                  render={({ field }) => (
-                    <FormItem className="w-full">
-                      <FormLabel>البريد الإلكتروني</FormLabel>
+                      <FormLabel>{tFormInput("fullName")}</FormLabel>
                       <FormControl>
                         <Input
-                          readOnly
-                          placeholder="البريد الإلكتروني"
+                          placeholder={tFormInput("fullName")}
                           {...field}
                         />
                       </FormControl>
                     </FormItem>
                   )}
-                ></FormField>
-              </div>
-              <div className="w-full flex items-center flex-col md:flex-row gap-5">
+                />
                 <FormField
-                  name="الإسم الكامل"
+                  name="email"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>رقم الهاتف</FormLabel>
+                      <FormLabel>{tFormInput("email")}</FormLabel>
                       <FormControl>
-                        <Input readOnly placeholder="رقم الهاتف" {...field} />
+                        <Input placeholder={tFormInput("email")} {...field} />
                       </FormControl>
                     </FormItem>
                   )}
-                ></FormField>
+                />
+              </div>
+              <div className="w-full flex items-center flex-col md:flex-row gap-5">
                 <FormField
-                  name="الإسم الكامل"
+                  name="phoneNumber"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>عنوان الرسالة</FormLabel>
+                      <FormLabel>{tFormInput("phoneNumber")}</FormLabel>
                       <FormControl>
                         <Input
-                          readOnly
-                          placeholder="عنوان الرسالة"
+                          placeholder={tFormInput("phoneNumber")}
                           {...field}
                         />
                       </FormControl>
                     </FormItem>
                   )}
-                ></FormField>
+                />
+                <FormField
+                  name="letterTitle"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>{tFormInput("letterTitle")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={tFormInput("letterTitle")}
+                          {...field}
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
               </div>
               <div className="w-full flex items-center flex-col md:flex-row gap-5">
                 <FormField
-                  name=""
+                  name="letterSubject"
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel> موضوع الرسالة</FormLabel>
+                      <FormLabel>{tFormInput("letterSubject")}</FormLabel>
                       <FormControl className="h-[8rem]">
                         <Input
-                          readOnly
-                          placeholder="موضوع الرسالة"
+                          placeholder={tFormInput("letterSubject")}
                           className="h-[8rem]"
                           {...field}
                         />
                       </FormControl>
                     </FormItem>
                   )}
-                ></FormField>
+                />
               </div>
-              <div className="flex justify-center mt-5">
-                <Button className="text-white">إرسال</Button>
+              <div className="flex justify-center pt-2.5">
+                <Button
+                  disabled={isPending}
+                  type="submit"
+                  className="text-white"
+                  size={"lg"}
+                >
+                  {isPending ? <BtnLoading /> : tCallToAction("sendLetter")}
+                </Button>
               </div>
             </form>
           </Form>

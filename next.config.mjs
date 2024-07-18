@@ -4,10 +4,26 @@ import createNextIntilPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntilPlugin();
 
 const nextConfig = {
-  experimental: { instrumentationHook: true },
   images: {
-    domains: ["uploadthing.com", "utfs.io", "img.clerk.com", "subdomain"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "uploadthing.com",
+        pathname: "**",
+      },
+       {
+        protocol: "https",
+        hostname: "utfs.io",
+        pathname: "**",
+      },
+       {
+        protocol: "https",
+        hostname: "img.clerk.com",
+        pathname: "**",
+      },
+    ],
   },
+
   reactStrictMode: false,
 };
 

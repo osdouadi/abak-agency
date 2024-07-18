@@ -8,7 +8,7 @@ const intlMiddleware = createMiddleware({
 });
 
 export default authMiddleware({
-  publicRoutes: ["/site", "/api/uploadthing"],
+  publicRoutes: ["/", "/api/uploadthing"],
 
   async beforeAuth(req: NextRequest) {
     if (req.nextUrl.pathname.startsWith("/api/")) {
@@ -25,9 +25,7 @@ export default authMiddleware({
     if (url.pathname === "/sign-in" || url.pathname === "/sign-up") {
       return NextResponse.rewrite(new URL(`/sign-in`, req.url));
     }
-    if (url.pathname === "/" || url.pathname === "/site") {
-      return NextResponse.rewrite(new URL("/site", req.url));
-    }
+    
     return intlMiddleware(req);
   },
 });

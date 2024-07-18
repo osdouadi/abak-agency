@@ -37,10 +37,18 @@ import { Undo2 } from "lucide-react";
 import { CategorySchema } from "@/lib/zod-schema/category-schema";
 import { CategoryData } from "@/types/category-data";
 import { useExtractIdFromPath } from "@/hooks/useExtractIdFromPath";
+import { useTranslations } from "next-intl";
+import { constants } from "@/config/constants";
 
 const CategoryUpdate = () => {
   const [categoryData, setCategoryData] = useState<CategoryData | null>(null);
-  const {id} = useExtractIdFromPath()
+  const { id } = useExtractIdFromPath();
+
+  const tDashboardEngineeringCategory = useTranslations(
+    "dashboard.engineeringCategory"
+  );
+  const tResponse = useTranslations("responses");
+  const tCallToAction = useTranslations("callToAction");
   const { toast } = useToast();
 
   useEffect(() => {
@@ -52,8 +60,8 @@ const CategoryUpdate = () => {
       } catch (error) {
         toast({
           variant: "destructive",
-          title: "فشل الحصول على التصنيف",
-          description: "الرجاء المحاولة مرة اخرى!",
+          title: tResponse("failedToGetEngineeringCategoryDetails"),
+          description: tResponse("pleaseTryAgain"),
         });
       }
     };
@@ -65,7 +73,7 @@ const CategoryUpdate = () => {
     mode: "onChange",
     resolver: zodResolver(CategorySchema),
   });
-  
+
   useEffect(() => {
     if (categoryData) {
       form.reset({
@@ -99,13 +107,13 @@ const CategoryUpdate = () => {
     try {
       await updateEngineeringCategory(id ?? "", values);
       toast({
-        title: "تعديل التصنيف بنجاح",
+        title: tResponse("engineeringCategoryEditedSuccessfully"),
       });
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "فشل تعديل التصنيف",
-        description: "الرجاء المحاولة مرة اخرى!",
+        title: tResponse("failedToEditEngineeringCategory"),
+        description: tResponse("pleaseTryAgain"),
       });
     }
   };
@@ -117,16 +125,22 @@ const CategoryUpdate = () => {
           <Card>
             <CardHeader className="w-full flex flex-row justify-between">
               <div>
-                <CardTitle>البيانات الأساسية للتصنيف</CardTitle>
+                <CardTitle>
+                  {tDashboardEngineeringCategory(
+                    "editingEngineeringCategoryMainDetails"
+                  )}
+                </CardTitle>
                 <CardDescription>
-                  يجب إدخال المعلومات التالية من أجل إنشاء تصنيف جديد
+                  {tDashboardEngineeringCategory(
+                    "editingEngineeringCategoryMainDetailsDescription"
+                  )}
                 </CardDescription>
               </div>
               <Link
-                href={"/admin-dashboard/engineering-categories"}
+                href={constants.links.adminEngineeringCategories}
                 className="bg-transparent hover:bg-primary transform transition-all text-primary font-medium hover:text-white py-2 px-4 border border-primary hover:border-transparent rounded flex items-center gap-1.5"
               >
-                عودة الى التصنيفات
+                {tCallToAction("backToEngineeringCategories")}
                 <Undo2 strokeWidth={1.4} className="mb-1" />
               </Link>
             </CardHeader>
@@ -138,7 +152,11 @@ const CategoryUpdate = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>أيقونة التصنيف الهندسي</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringCategory(
+                          "editingEngineeringCategoryIcon"
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <FileUpload
                           apiEndpoint="categoryIcon"
@@ -156,7 +174,11 @@ const CategoryUpdate = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>صورة التصنيف الهندسي</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringCategory(
+                          "editingEngineeringCategoryBanner"
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <FileUpload
                           apiEndpoint="categoryBanner"
@@ -176,9 +198,18 @@ const CategoryUpdate = () => {
                   name="title.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان التصنيف</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringCategory(
+                          "editingEngineeringCategoryTitleAR"
+                        )}
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="عنوان التصنيف" {...field} />
+                        <Input
+                          placeholder={tDashboardEngineeringCategory(
+                            "editingEngineeringCategoryTitleAR"
+                          )}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -190,93 +221,16 @@ const CategoryUpdate = () => {
                   name="title.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان التصنيف باللغة الإنجليزية</FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="عنوان التصنيف باللغة الإنجليزية"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </InputGroup>
-              <InputGroup>
-                <FormField
-                  disabled={isPending}
-                  control={form.control}
-                  name="SEOSettings.pageTitle.ar"
-                  render={({ field }) => (
-                    <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف التصنيف</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="وصف التصنيف"
-                          {...field}
-                          className="h-5 md:h-28"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  disabled={isPending}
-                  control={form.control}
-                  name="SEOSettings.pageTitle.en"
-                  render={({ field }) => (
-                    <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف التصنيف باللغة الإنجليزية</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="وصف التصنيف باللغة الإنجليزية"
-                          {...field}
-                          className="h-5 md:h-28"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </InputGroup>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>إعدادات السيو</CardTitle>
-              <CardDescription>
-                اعدادات خاصة بتحسين محركات البحث الخصة بصفحة التصنيف
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <InputGroup>
-                <FormField
-                  disabled={isPending}
-                  control={form.control}
-                  name="SEOSettings.pageDescription.ar"
-                  render={({ field }) => (
-                    <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان صفحة التصنيف</FormLabel>
-                      <FormControl>
-                        <Input placeholder="عنوان صفحة التصنيف" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  disabled={isPending}
-                  control={form.control}
-                  name="SEOSettings.pageDescription.en"
-                  render={({ field }) => (
-                    <FormItem className="w-full md:w-1/2">
                       <FormLabel>
-                        عنوان صفحة التصنيف باللغة الإنجليزية
+                        {tDashboardEngineeringCategory(
+                          "editingEngineeringCategoryTitleEN"
+                        )}
                       </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="عنوان صفحة التصنيف باللغة الإنجليزية"
+                          placeholder={tDashboardEngineeringCategory(
+                            "editingEngineeringCategoryTitleEN"
+                          )}
                           {...field}
                         />
                       </FormControl>
@@ -292,10 +246,16 @@ const CategoryUpdate = () => {
                   name="description.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف صفحة التصنيف</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringCategory(
+                          "editingEngineeringCategoryDescriptionAR"
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف صفحة التصنيف"
+                          placeholder={tDashboardEngineeringCategory(
+                            "editingEngineeringCategoryDescriptionAR"
+                          )}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -310,10 +270,122 @@ const CategoryUpdate = () => {
                   name="description.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف صفحة التصنيف باللغة الإنجليزية</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringCategory(
+                          "editingEngineeringCategoryDescriptionEN"
+                        )}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف صفحة التصنيف باللغة الإنجليزية"
+                          placeholder={tDashboardEngineeringCategory(
+                            "editingEngineeringCategoryDescriptionEN"
+                          )}
+                          {...field}
+                          className="h-5 md:h-28"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </InputGroup>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>
+                {tDashboardEngineeringCategory("editingSEOSettings")}
+              </CardTitle>
+              <CardDescription>
+                {tDashboardEngineeringCategory("editingSEOSettingsDescription")}
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <InputGroup>
+                <FormField
+                  disabled={isPending}
+                  control={form.control}
+                  name="SEOSettings.pageDescription.ar"
+                  render={({ field }) => (
+                    <FormItem className="w-full md:w-1/2">
+                      <FormLabel>
+                        {tDashboardEngineeringCategory("editingPageTitleAR")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={tDashboardEngineeringCategory(
+                            "editingPageTitleAR"
+                          )}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  disabled={isPending}
+                  control={form.control}
+                  name="SEOSettings.pageDescription.en"
+                  render={({ field }) => (
+                    <FormItem className="w-full md:w-1/2">
+                      <FormLabel>
+                        {tDashboardEngineeringCategory("editingPageTitleEN")}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={tDashboardEngineeringCategory(
+                            "editingPageTitleEN"
+                          )}
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </InputGroup>
+              <InputGroup>
+                <FormField
+                  disabled={isPending}
+                  control={form.control}
+                  name="description.ar"
+                  render={({ field }) => (
+                    <FormItem className="w-full md:w-1/2">
+                      <FormLabel>
+                        {tDashboardEngineeringCategory(
+                          "editingPageDescriptionAR"
+                        )}
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder={tDashboardEngineeringCategory(
+                            "editingPageDescriptionAR"
+                          )}
+                          {...field}
+                          className="h-5 md:h-28"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  disabled={isPending}
+                  control={form.control}
+                  name="description.en"
+                  render={({ field }) => (
+                    <FormItem className="w-full md:w-1/2">
+                      <FormLabel>
+                        {tDashboardEngineeringCategory(
+                          "editingPageDescriptionEN"
+                        )}
+                      </FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder={tDashboardEngineeringCategory(
+                            "editingPageDescriptionEN"
+                          )}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -332,7 +404,7 @@ const CategoryUpdate = () => {
               className="text-white"
               size={"lg"}
             >
-              {isPending ? <BtnLoading /> : "حفظ التعديلات"}
+              {isPending ? <BtnLoading /> : tCallToAction("saveEdits")}
             </Button>
           </div>
         </form>

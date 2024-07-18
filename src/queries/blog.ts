@@ -9,7 +9,7 @@ export const getBlogList = async () => {
 
   try {
     const blogList = await Blog.find({});
-    return JSON.stringify(blogList);
+    return JSON.parse(JSON.stringify(blogList));
   } catch (error: any) {
     throw new Error(error.message || "Failed to fetch categories list");
   }
@@ -21,7 +21,7 @@ export const getBlogById = async (blogId: string) => {
   try {
     const blogById = await Blog.findById(blogId);
 
-    return JSON.stringify(blogById);
+    return JSON.parse(JSON.stringify(blogById));
   } catch (error: any) {
     throw new Error(error.message || "Failed to fetch get category details");
   }

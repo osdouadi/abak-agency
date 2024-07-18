@@ -36,12 +36,15 @@ import { Undo2 } from "lucide-react";
 
 import { createBlog } from "@/queries/blog";
 import { BlogSchema } from "@/lib/zod-schema/blog-schema";
+import { constants } from "@/config/constants";
+import { useExtractLocaleFromPath } from "@/hooks/useExtractLocaleFromPath";
 
 const BlogDetails = () => {
   const tResponse = useTranslations("responses");
-  const tDashboardBlog = useTranslations("dashboard.blog")
+  const tDashboardBlog = useTranslations("dashboard.blog");
   const tCallToAction = useTranslations("callToAction");
 
+  const locale = useExtractLocaleFromPath()
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof BlogSchema>>({
@@ -80,12 +83,12 @@ const BlogDetails = () => {
     try {
       await createBlog(values);
       toast({
-        title: tResponse("bloggAddSuccussfully"),
+        title: tResponse("blogAddedSuccessfully"),
       });
     } catch (error) {
       toast({
         variant: "destructive",
-        title: tResponse("bloggAddSuccussfully"),
+        title: tResponse("failedToAddBlog"),
         description: tResponse("pleaseTryAgain"),
       });
     }
@@ -94,20 +97,24 @@ const BlogDetails = () => {
   return (
     <AlertDialog>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-4 py-4"
+          dir={locale === "ar" ? "rtl" : "ltr"}
+        >
           <Card>
-            <CardHeader className="w-full flex flex-row justify-between">
-              <div>
-                <CardTitle>{tDashboardBlog("blogDetailsCardTitle")}</CardTitle>
+            <CardHeader className="w-full flex justify-between flex-col-reverse md:flex-row relative">
+              <div className="pt-14 md:pt-0">
+                <CardTitle>{tDashboardBlog("detailsTitle")}</CardTitle>
                 <CardDescription>
-                  {tDashboardBlog("blogDetailsCardDescription")}{" "}
+                  {tDashboardBlog("detailsDescription")}{" "}
                 </CardDescription>
               </div>
               <Link
-                href={"/admin-dashboard/blogs"}
-                className="bg-transparent hover:bg-primary transform transition-all text-primary font-medium hover:text-white py-2 px-4 border border-primary hover:border-transparent rounded flex items-center gap-1.5"
+                href={constants.links.adminBlogs}
+                className="bg-transparent hover:bg-primary transform transition-all text-primary font-medium hover:text-white text-sm py-2 px-4 border border-primary hover:border-transparent rounded flex items-center gap-1.5 absolute top-1 md:relative"
               >
-                {tCallToAction("backToBlogs")}
+                {tCallToAction("backToEngineeringCategories")}
                 <Undo2 strokeWidth={1.4} className="mb-1" />
               </Link>
             </CardHeader>
@@ -118,7 +125,7 @@ const BlogDetails = () => {
                 control={form.control}
                 render={({ field }) => (
                   <FormItem className="w-full mb-5 md:pb-6">
-                    <FormLabel> {tDashboardBlog("blogImageLabel")}</FormLabel>
+                    <FormLabel> {tDashboardBlog("imageLabel")}</FormLabel>
                     <FormControl>
                       <FileUpload
                         apiEndpoint="blogImage"
@@ -137,9 +144,12 @@ const BlogDetails = () => {
                   name="title.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان المقال</FormLabel>
+                      <FormLabel>{tDashboardBlog("titleAR")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="عنوان المقال" {...field} />
+                        <Input
+                          placeholder={tDashboardBlog("titleAR")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -151,10 +161,10 @@ const BlogDetails = () => {
                   name="title.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان المقال باللغة الإنجليزية</FormLabel>
+                      <FormLabel>{tDashboardBlog("titleEN")}</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="عنوان المقال باللغة الإنجليزية"
+                          placeholder={tDashboardBlog("titleEN")}
                           {...field}
                         />
                       </FormControl>
@@ -170,10 +180,12 @@ const BlogDetails = () => {
                   name="shortDescription.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف المقال</FormLabel>
+                      <FormLabel>
+                        {tDashboardBlog("shortDescriptionAR")}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف المقال"
+                          placeholder={tDashboardBlog("shortDescriptionAR")}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -188,10 +200,12 @@ const BlogDetails = () => {
                   name="shortDescription.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف التصنيف باللغة الإنجليزية</FormLabel>
+                      <FormLabel>
+                        {tDashboardBlog("shortDescriptionEN")}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف المقال باللغة الإنجليزية"
+                          placeholder={tDashboardBlog("shortDescriptionEN")}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -208,12 +222,14 @@ const BlogDetails = () => {
                   name="longDescription.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف المقال</FormLabel>
+                      <FormLabel>
+                        {tDashboardBlog("longDescriptionAR")}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف المقال"
+                          placeholder={tDashboardBlog("longDescriptionAR")}
                           {...field}
-                          className="h-5 md:h-28"
+                          className="h-9 md:h-36"
                         />
                       </FormControl>
                       <FormMessage />
@@ -226,12 +242,15 @@ const BlogDetails = () => {
                   name="longDescription.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف التصنيف باللغة الإنجليزية</FormLabel>
+                      <FormLabel>
+                        {" "}
+                        {tDashboardBlog("longDescriptionEN")}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف المقال باللغة الإنجليزية"
+                          placeholder={tDashboardBlog("longDescriptionEN")}
                           {...field}
-                          className="h-5 md:h-28"
+                          className="h-9 md:h-36"
                         />
                       </FormControl>
                       <FormMessage />
@@ -243,9 +262,9 @@ const BlogDetails = () => {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>إعدادات السيو</CardTitle>
+              <CardTitle>{tDashboardBlog("SEOSettings")} </CardTitle>
               <CardDescription>
-                اعدادات خاصة بتحسين محركات البحث الخصة بصفحة المقال
+                {tDashboardBlog("SEOSettingsDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -256,9 +275,12 @@ const BlogDetails = () => {
                   name="SEOSettings.pageTitle.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان صفحة المقال</FormLabel>
+                      <FormLabel>{tDashboardBlog("pageTitleAR")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="عنوان صفحة المقال" {...field} />
+                        <Input
+                          placeholder={tDashboardBlog("pageTitleAR")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -270,10 +292,10 @@ const BlogDetails = () => {
                   name="SEOSettings.pageTitle.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان صفحة المقال باللغة الإنجليزية</FormLabel>
+                      <FormLabel>{tDashboardBlog("pageTitleEN")}</FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="عنوان صفحة المقال باللغة الإنجليزية"
+                          placeholder={tDashboardBlog("pageTitleEN")}
                           {...field}
                         />
                       </FormControl>
@@ -289,10 +311,12 @@ const BlogDetails = () => {
                   name="SEOSettings.pageDescription.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف صفحة المقال</FormLabel>
+                      <FormLabel>
+                        {tDashboardBlog("pageDescriptionAR")}{" "}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف صفحة المقال"
+                          placeholder={tDashboardBlog("pageDescriptionAR")}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -307,10 +331,12 @@ const BlogDetails = () => {
                   name="SEOSettings.pageDescription.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف صفحة المقال باللغة الإنجليزية</FormLabel>
+                      <FormLabel>
+                        {tDashboardBlog("pageDescriptionEN")}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف صفحة المقال باللغة الإنجليزية"
+                          placeholder={tDashboardBlog("pageDescriptionEN")}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -329,7 +355,7 @@ const BlogDetails = () => {
               className="text-white"
               size={"lg"}
             >
-              {isPending ? <BtnLoading /> : "إدراج المقال"}
+              {isPending ? <BtnLoading /> : tCallToAction("addBlog")}
             </Button>
           </div>
         </form>

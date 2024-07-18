@@ -2,10 +2,10 @@ import ProjectImageList from "@/containers/dashboard/image-list";
 import { getGallery } from "@/queries/gallery";
 
 const page = async () => {
-  const galleryData = await getGallery();
+  const data = await getGallery();
   return (
     <>
-      <ProjectImageList galleryData={galleryData} />
+      <ProjectImageList data={data} />
     </>
   );
 };

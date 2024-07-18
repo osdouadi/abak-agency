@@ -37,7 +37,7 @@ const Navigation = ({ user }: Props) => {
       </aside>
       <nav className="hidden md:block absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <ul
-          className={clsx("flex items-center justify-center gap-8", {
+          className={clsx("flex items-center justify-center gap-5", {
             "flex-row-reverse": locale === "ar",
           })}
         >
@@ -46,7 +46,7 @@ const Navigation = ({ user }: Props) => {
               key={index}
               href={item.href}
               className={clsx(
-                "relative text-lg hover:text-primary hover:active-link transform transition-all",
+                "relative text-base hover:text-primary hover:active-link transform transition-all",
                 {
                   "active-link text-primary z-10": currentPath === item.href,
                 }

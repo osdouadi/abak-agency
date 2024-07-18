@@ -39,11 +39,9 @@ const GalleryImageList = ({
           .filter((filteredItem: GalleryImage) => !filteredItem.isDisabled)
           .map((item: GalleryImage, index: number) => (
             <SlikyItem key={index}>
-              <Image
+              <img
                 src={item?.galleryImage}
                 alt=""
-                width={400}
-                height={400}
                 className="h-full rounded-lg"
               />
             </SlikyItem>

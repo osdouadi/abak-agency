@@ -5,8 +5,8 @@ import React from "react";
 
 const ConsultingContainer: React.FC = () => {
   return (
-    <section className="min-h-screen w-full flex flex-col md:flex-row md:pt-16 px-4 md:px-10">
-      <div className="w-full md:w-1/2">
+    <section className="min-h-screen w-full flex flex-col md:flex-row mt-5 md:mt-8 px-5 md:px-10 md:gap-8">
+      <div className="w-full md:w-[75%]">
         <ConsultingHeaderGroup />
         <ConsultingForm />
       </div>

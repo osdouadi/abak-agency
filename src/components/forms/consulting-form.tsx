@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+
 import { AlertDialog } from "../ui/alert-dialog";
 import {
   Card,
@@ -33,6 +34,14 @@ const ConsultingForm = () => {
   const form = useForm<z.infer<typeof ConsultingOrderSchema>>({
     mode: "onChange",
     resolver: zodResolver(ConsultingOrderSchema),
+    defaultValues: {
+      fullName: "",
+      email: "",
+      phoneNumber: "",
+      city: "",
+      address: "",
+      date: ""
+    },
   });
 
   const isPending = form.formState.isSubmitting;
@@ -55,8 +64,8 @@ const ConsultingForm = () => {
   return (
     <AlertDialog>
       <Card className="w-full">
-        <CardHeader>
-          <CardTitle className="mb-2 md:mb-4">
+        <CardHeader className="text-center md:text-start">
+          <CardTitle>
             {tFormContent("header")}
           </CardTitle>
           <CardDescription className="text-base md:text-lg">
@@ -149,7 +158,7 @@ const ConsultingForm = () => {
                   )}
                 ></FormField>
               </div>
-              <div className="flex justify-center">
+              <div className="flex justify-center pt-2.5">
                 <Button
                   disabled={isPending}
                   type="submit"

@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
+
 import { AlertDialog } from "../ui/alert-dialog";
 import {
   Card,
@@ -18,21 +20,30 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import FileUpload from "../global/file-upload";
 import { Input } from "../ui/input";
-import { useToast } from "../ui/use-toast";
 import { Button } from "../ui/button";
 import BtnLoading from "../global/btn-loading";
-import Link from "next/link";
 import { Undo2 } from "lucide-react";
 import { Switch } from "../ui/switch";
+
+
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useToast } from "../ui/use-toast";
+import { useTranslations } from "next-intl";
+import { useForm } from "react-hook-form";
+
+
 import { ImageSchema } from "@/lib/zod-schema/image";
 import { createImage } from "@/queries/gallery";
+import { constants } from "@/config/constants";
 
 const ImageDetails = () => {
+    const tDashboardGallery = useTranslations("dashboard.gallery");
+    const tResponse = useTranslations("responses");
+    const tCallToAction = useTranslations("callToAction");
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof ImageSchema>>({
@@ -54,13 +65,13 @@ const ImageDetails = () => {
     try {
       await createImage(values);
       toast({
-        title: "إنشاء التصنيف بنجاح",
+        title: tResponse("ImageAddedSuccessfully"),
       });
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "فشل إنشاء التصنيف",
-        description: "الرجاء المحاولة مرة اخرى!",
+        title: tResponse("failedToAddImage"),
+        description: tResponse("pleaseTryAgain"),
       });
     }
   };
@@ -72,16 +83,16 @@ const ImageDetails = () => {
           <Card>
             <CardHeader className="w-full flex flex-row justify-between">
               <div>
-                <CardTitle>البيانات الأساسية للمشروع</CardTitle>
+                <CardTitle>{tDashboardGallery("imageMainDetails")}</CardTitle>
                 <CardDescription>
-                  يجب إدخال المعلومات التالية من أجل إنشاء مشروع جديد
+                  {tDashboardGallery("imageDetailsDescription")}
                 </CardDescription>
               </div>
               <Link
-                href={"/admin-dashboard/gallery"}
+                href={constants.links.adminGallery}
                 className="bg-transparent hover:bg-primary transform transition-all text-primary font-medium hover:text-white py-2 px-4 border border-primary hover:border-transparent rounded flex items-center gap-1.5"
               >
-                عودة الى المشاريع
+                {tCallToAction("backToImages")}
                 <Undo2 strokeWidth={1.4} className="mb-1" />
               </Link>
             </CardHeader>
@@ -94,7 +105,9 @@ const ImageDetails = () => {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <FormLabel>صورة المشروع </FormLabel>
+                        <FormLabel>
+                          {tDashboardGallery("addProjectImage")}
+                        </FormLabel>
                         <FormControl>
                           <FileUpload
                             apiEndpoint="galleryImage"
@@ -114,9 +127,12 @@ const ImageDetails = () => {
                     name="title.ar"
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <FormLabel>عنوان المشروع</FormLabel>
+                        <FormLabel>{tDashboardGallery("titleAR")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="عنوان المشروع" {...field} />
+                          <Input
+                            placeholder={tDashboardGallery("titleAR")}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -128,10 +144,10 @@ const ImageDetails = () => {
                     name="title.en"
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <FormLabel>عنوان الصورة بالإنجليزية</FormLabel>
+                        <FormLabel>{tDashboardGallery("titleEN")}</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="عنوان الصورة بالإنجليزية"
+                            placeholder={tDashboardGallery("titleEN")}
                             {...field}
                           />
                         </FormControl>
@@ -147,10 +163,10 @@ const ImageDetails = () => {
                         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                           <div className="space-y-0.5">
                             <FormLabel className="text-base">
-                              إخفاء صورة المشروع
+                              {tDashboardGallery("hideProjectImage")}
                             </FormLabel>
                             <FormDescription>
-                              عدم إظهار صورة المشروع في الصفحة الرئيسية
+                              {tDashboardGallery("hideProjectImageDescription")}
                             </FormDescription>
                           </div>
                           <FormControl>
@@ -170,7 +186,7 @@ const ImageDetails = () => {
                     className="text-white"
                     size={"lg"}
                   >
-                    {isPending ? <BtnLoading /> : "إدراج المشروع"}
+                    {isPending ? <BtnLoading /> : tCallToAction("addImage")}
                   </Button>
                 </div>
               </div>

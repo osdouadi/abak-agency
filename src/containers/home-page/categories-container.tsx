@@ -15,7 +15,7 @@ const CategoryContainer= async () => {
   }
 
   return (
-    <section className="flex justify-center items-center flex-col text-center gap-4 md:mt-16 px-4 md:px-10">
+    <section className="flex justify-center items-center flex-col text-center gap-2 px-4 md:px-10">
       <CategorySectionTop />
       <div className="flex flex-col md:flex-row justify-center items-center gap-7 md:gap-14">
         <CategoryList

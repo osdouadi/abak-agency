@@ -1,5 +1,8 @@
 "use client";
 
+import React from "react";
+import Link from "next/link";
+
 import { categoryColumns } from "@/components/dashboard/data-table/category-columns";
 import { DataTable } from "@/components/dashboard/services/data-table";
 import {
@@ -8,18 +11,26 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useToast } from "@/components/ui/use-toast";
-import { deleteEngineeringCategoriesList } from "@/queries/engineering-category";
 import { ChevronDown, Plus } from "lucide-react";
-import Link from "next/link";
+
+import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import React from "react";
+import { useTranslations } from "next-intl";
+
+import { constants } from "@/config/constants";
+import { deleteEngineeringCategoriesList } from "@/queries/engineering-category";
 
 export type CategoriesListProps = {
   data: any;
 };
 
 const CategoryList: React.FC<CategoriesListProps> = ({ data }) => {
+  const tDashboardEngineeringCategory = useTranslations(
+    "dashboard.engineeringCategory"
+  );
+  const tCallToAction = useTranslations("callToAction");
+  const tResponses = useTranslations("responses");
+
   const { toast } = useToast();
   const router = useRouter();
 
@@ -27,14 +38,14 @@ const CategoryList: React.FC<CategoriesListProps> = ({ data }) => {
     try {
       await deleteEngineeringCategoriesList();
       toast({
-        title: "حذف جميع التصنيفات بنجاح",
+        title: tResponses("allEnineeringCategoriesDeletedSuccessfully"),
       });
       router.refresh();
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "فشل حذف التصنيفات",
-        description: "الرجاء المحاولة مرة اخرى!",
+        title: tResponses("failedToDeleteAllEnineeringCategories"),
+        description: tResponses("pleaseTryAgain"),
       });
     }
   };
@@ -42,18 +53,20 @@ const CategoryList: React.FC<CategoriesListProps> = ({ data }) => {
   return (
     <>
       <div className="mb-7 flex justify-between items-center">
-        <h2 className="md:text-3xl"> التصنيفات الهندسية</h2>
+        <h2 className="md:text-3xl">
+          {tDashboardEngineeringCategory("engineeringCategories")}
+        </h2>
         <div className="flex items-center justify-between gap-2 md:gap-4">
           <Link
-            href={"/admin-dashboard/engineering-categories/new-category"}
+            href={constants.links.adminNewEngineeringCategory}
             className="bg-primary rounded-md py-1.5 px-3 md:py-2.5 md:px-4 text-xs md:text-base flex gap-1.5"
           >
-            إضافة تصنيف جديد
+            {tCallToAction("addNewCategory")}
             <Plus strokeWidth={1.4} />
           </Link>
           <DropdownMenu>
             <DropdownMenuTrigger className="border-[0.014rem] border-primary py-1.5 px-3 md:py-2.5 md:px-4 rounded-md text-xs md:text-base flex gap-1.5">
-              إعدادات إضافية
+              {tCallToAction("additionalSettings")}
               <ChevronDown strokeWidth={1.4} />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="px-3">
@@ -61,11 +74,11 @@ const CategoryList: React.FC<CategoriesListProps> = ({ data }) => {
                 onClick={() => handleDeleteCategoryList()}
                 className="cursor-pointer w-full flex justify-end py-1.5"
               >
-                حذف جميع التصنيفات
+                {tCallToAction("deleteAllCategories")}
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer w-full flex justify-end py-1.5">
-                <Link href={"/admin-dashboard/engineering-services"}>
-                  الخدمات
+                <Link href={constants.links.adminEngineeringServices}>
+                  {tCallToAction("showServices")}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -73,10 +86,12 @@ const CategoryList: React.FC<CategoriesListProps> = ({ data }) => {
         </div>
       </div>
       <div className="pb-2.5 flex justify-center items-center">
-        <h2 className="md:text-2xl"> جميع خدمات المكتب</h2>
+        <h2 className="md:text-2xl">
+          {tDashboardEngineeringCategory("allEngineeringCategories")}
+        </h2>
       </div>
       <div className="mx-auto">
-        <DataTable columns={categoryColumns} data={JSON.parse(data)} />
+        <DataTable columns={categoryColumns} data={data} />
       </div>
     </>
   );

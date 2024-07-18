@@ -1,54 +1,55 @@
 "use client";
 
+import Link from "next/link";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { formatDate } from "@/lib/utils";
-import {
-  deleteEngineeringCategory,
-  getEnginneringCategoriesList,
-} from "@/queries/engineering-category";
+
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import { useTranslations } from "next-intl";
+
+import { formatDate } from "@/lib/utils";
+import { deleteEngineeringCategory } from "@/queries/engineering-category";
+import { constants } from "@/config/constants";
 
 export interface Category {
-  id: string;
+  _id: string;
   title: { ar: string; en: string };
   description: { ar: string; en: string };
   categoryBanner: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
 }
 
 export const categoryColumns: ColumnDef<Category>[] = [
   {
     accessorKey: "title.ar",
-    header: "عنوان التصنيف",
+    header: "engineeringCategoryTitle",
   },
   {
     accessorKey: "services.length",
-    header: "عدد الخدمات",
+    header: "engineeringServicesCount",
   },
   {
-    accessorKey: `createdAt`,
-    header: "تاريخ إضافة التصنيف",
+    accessorKey: "createdAt",
+    header: "engineeringCategoryCreatedAt",
     cell: ({ row }) => formatDate(row.original.createdAt),
   },
   {
-    header: "الاجراءات",
+    header: "actions",
     id: "actions",
     cell: ({ row }) => {
       const category = row.original;
       const router = useRouter();
+      const tResponse = useTranslations("responses");
+      const tCallToAction = useTranslations("callToAction");
       const { toast } = useToast();
 
       const handleDeleteCategoryById = async (categoryId: string) => {
@@ -56,13 +57,13 @@ export const categoryColumns: ColumnDef<Category>[] = [
           await deleteEngineeringCategory(categoryId);
           router.refresh();
           toast({
-            title: "حذف التصنيف بنجاح",
+            title: tResponse("enineeringCategoryDeletedSuccessfully"),
           });
         } catch (error) {
           toast({
             variant: "destructive",
-            title: "فشل حذف التصنيف",
-            description: "الرجاء المحاولة مرة اخرى!",
+            title: tResponse("enineeringCategoryDeletedSuccessfully"),
+            description: tResponse("pleaseTryAgain"),
           });
         }
       };
@@ -71,32 +72,22 @@ export const categoryColumns: ColumnDef<Category>[] = [
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">الإجراءات</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="flex flex-col items-end">
-            <DropdownMenuLabel>الإجراءات</DropdownMenuLabel>
-            <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link
-                href={`/admin-dashboard/engineering-categories/${category.id}`}
+                href={`${constants.links.adminUpdateEngineeringCategory}${category?._id}`}
               >
-                عرض معلومات التصنيف
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link
-                href={`/admin-dashboard/engineering-categories/update/${category.id}`}
-              >
-                تعديل التصنيف
+                {tCallToAction("editEngineeringCategory")}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
-              onClick={() => handleDeleteCategoryById(category?.id)}
+              onClick={() => handleDeleteCategoryById(category?._id)}
               className="cursor-pointer"
             >
-              حذف التصنيف
+              {tCallToAction("deleteEngineeringCategory")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

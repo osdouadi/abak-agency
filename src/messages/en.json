@@ -5,18 +5,113 @@
       "aboutUs": "About Us",
       "blogs": "Blogs",
       "pricing": "Pricing",
-      "recuitment": "Recruitment",
+      "recruitment": "Recruitment",
       "contactUs": "Contact Us"
     },
     "homePage": {
-      "heroSectionSlogan": "We fulfill your ideas with the highest quality"
+      "heroSectionSlogan": "We bring your ideas to life with the highest quality",
+      "cardFeatureAppointmentTitle": "Book an appointment that suits you",
+      "cardFeatureNotificationTitle": "Receive meeting notification",
+      "cardFeatureMeetingTitle": "Your online meeting",
+      "cardFeatureAppointmentDescription": "Fill out the form and choose a suitable meeting time",
+      "cardFeatureSatisfactionTitle": "Your satisfaction is our top priority",
+      "cardFeatureNotificationDescription": "Our team will review your request and send you a notification as soon as possible",
+      "cardFeatureMeetingDescription": "Our consultant will provide you with remote advice",
+      "cardFeatureSatisfactionDescription": "Our experts will find solutions to all your inquiries"
     },
     "headerGroups": {
-      "categoriesSectionHeader": "Abak Office Service Categories",
-      "categoriesSectionSubheader": "We meet all your engineering needs by providing a wide range of engineering services at your disposal"
+      "categoriesHeader": "APAC Office Services Categories",
+      "categoriesSubheader": "We meet all your engineering needs by providing a wide range of engineering services at your disposal",
+      "consultingHeader": "Consult with an APAC expert from home",
+      "consultingSubheader": "APAC alleviates your engineering worries. Our team is ready to receive your concerns and provide the appropriate consultation."
+    },
+    "form": {
+      "formContent": {
+        "consulting": {
+          "header": "Consultation Information",
+          "subheader": "We are closer than you think. You have a dedicated consultant at your service. At APAC, we offer you an unprecedented service in engineering consultations. Talk to your consultant about all your aspirations to achieve your project dream. Do not hesitate, we are part of realizing your vision."
+        }
+      },
+      "formInput": {
+        "fullName": "Full Name",
+        "email": "Email",
+        "phoneNumber": "Phone Number",
+        "city": "City",
+        "address": "Address",
+        "specifyingDate": "Specify Date",
+        "pleaseSpecifyConvinientDate": "Please choose a convenient date"
+      }
     }
   },
   "callToAction": {
-    "login": "Login"
+    "login": "Login",
+    "backToBlogs": "Back to Blogs",
+    "addBlog": "Add Blog",
+    "addNewBlog": "Add New Blog",
+    "additionalSettings": "Additional Settings",
+    "deleteAllBlogs": "Delete All Blogs",
+    "backToDashboard": "Back to Dashboard",
+    "actions": "Actions",
+    "editBlog": "Edit Blog",
+    "deleteBlog": "Delete Blog",
+    "saveEdits": "Save Edits"
+  },
+  "responses": {
+    "orderSent": "Order sent",
+    "sendingOrderFailed": "Failed to send order",
+    "pleaseTryAgain": "Please try again!",
+    "blogAddedSuccessfully": "Blog added successfully",
+    "failedToAddBlog": "Failed to create blog",
+    "allBlogsDeletedSuccessfully": "All blogs deleted successfully",
+    "failedToDeleteAllBlogs": "Failed to delete all blogs",
+    "blogDeletedSuccessfully": "Blog deleted successfully",
+    "failedToDeleteBlog": "Failed to delete blog",
+    "noResult": "No results found",
+    "failedToGetBlogDetails": "Failed to get blog details",
+    "blogEditedSuccessfully": "Blog edited successfully",
+    "failedToEditBlog": "Failed to edit blog"
+  },
+  "dashboard": {
+    "blog": {
+      "detailsTitle": "Basic Blog Information",
+      "detailsDescription": "Please enter the following information correctly to create a new blog.",
+      "imageLabel": "Add a relevant image to the blog",
+      "titleAR": "Blog title in Arabic",
+      "titleEN": "Blog title in English",
+      "shortDescriptionAR": "Short description in Arabic",
+      "shortDescriptionEN": "Short description in English",
+      "longDescriptionAR": "Long description in Arabic",
+      "longDescriptionEN": "Long description in English",
+      "SEOSettings": "SEO Settings",
+      "SEOSettingsDescription": "Search engine optimization for the blog page",
+      "pageTitleAR": "Blog page title in Arabic",
+      "pageTitleEN": "Blog page title in English",
+      "pageDescriptionAR": "Blog page description in Arabic",
+      "pageDescriptionEN": "Blog page description in English",
+      "engineeringBlogs": "Engineering Blogs",
+      "allEngineeringBlogs": "All Engineering Blogs",
+      "blogTitle": "Blog Title",
+      "blogCreatedAt": "Blog Created At",
+      "EditingBlogMainDetails": "Edit Basic Blog Information",
+      "EditingBlogMainDetailsDescription": "Please enter the following information correctly to edit the blog.",
+      "editingBlogImage": "Edit Blog Image",
+      "editingBlogTitleAR": "Edit Blog Title in Arabic",
+      "editingBlogTitleEN": "Edit Blog Title in English",
+      "editingBlogShortDescriptionAR": "Edit Short Description in Arabic",
+      "editingBlogShortDescriptionEN": "Edit Short Description in English",
+      "editingBlogLongDescriptionAR": "Edit Long Description in Arabic",
+      "editingBlogLongDescriptionEN": "Edit Long Description in English",
+      "editingSEOSettings": "Edit SEO Settings",
+      "editingSEOSettingsDescription": "Edit settings for search engine optimization for the blog page",
+      "editingPageTitleAR": "Edit Blog Page Title in Arabic",
+      "editingPageTitleEN": "Edit Blog Page Title in English",
+      "editingPageDescriptionAR": "Edit Blog Page Description in Arabic",
+      "editingPageDescriptionEN": "Edit Blog Page Description in English"
+    }
+  },
+  "table": {
+    "blogTitle": "Blog Title",
+    "blogCreatedAt": "Blog Created At",
+    "actions": "Actions"
   }
 }

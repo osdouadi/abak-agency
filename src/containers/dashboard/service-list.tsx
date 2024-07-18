@@ -1,5 +1,9 @@
 "use client";
 
+import React from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 import { serviceColumns } from "@/components/dashboard/data-table/service-columns";
 import { DataTable } from "@/components/dashboard/services/data-table";
 import {
@@ -8,19 +12,24 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useToast } from "@/components/ui/use-toast";
-import { deleteEngineeringCategoriesList } from "@/queries/engineering-category";
-import { deleteEngineeringServiceList } from "@/queries/engineering-service";
 import { ChevronDown, Plus } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React from "react";
+
+import { useToast } from "@/components/ui/use-toast";
+import { deleteEngineeringServiceList } from "@/queries/engineering-service";
+import { useTranslations } from "next-intl";
+import { constants } from "@/config/constants";
 
 export type ServiceListProps = {
   data: any;
 };
 
 const ServiceList: React.FC<ServiceListProps> = ({ data }) => {
+  const tResponse = useTranslations("responses");
+  const tDashboardEngineeringService = useTranslations(
+    "dashboard.engineeringService"
+  );
+  const tCallToAction = useTranslations("callToAction")
+
   const { toast } = useToast();
   const router = useRouter();
 
@@ -28,14 +37,14 @@ const ServiceList: React.FC<ServiceListProps> = ({ data }) => {
     try {
       await deleteEngineeringServiceList();
       toast({
-        title: "حذف جميع الخدمات بنجاح",
+        title: tResponse("allEnineeringServicesDeletedSuccessfully"),
       });
       router.refresh();
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "فشل حذف الخدمات",
-        description: "الرجاء المحاولة مرة اخرى!",
+        title: tResponse("failedToDeleteAllEngineeringServices"),
+        description: tResponse("pleaseTryAgain"),
       });
     }
   };
@@ -43,18 +52,20 @@ const ServiceList: React.FC<ServiceListProps> = ({ data }) => {
   return (
     <>
       <div className="mb-7 flex justify-between items-center">
-        <h2 className="md:text-3xl"> الخدمات الهندسية</h2>
+        <h2 className="md:text-3xl">
+          {tDashboardEngineeringService("detailsTitle")}
+        </h2>
         <div className="flex items-center justify-between gap-2 md:gap-4">
           <Link
-            href={"/admin-dashboard/engineering-services/new-service"}
+            href={constants.links.adminNewEngineeringService}
             className="bg-primary rounded-md py-1.5 px-3 md:py-2.5 md:px-4 text-xs md:text-base flex gap-1.5"
           >
-            إضافة خدمة جديدة
+            {tCallToAction("addService")}
             <Plus strokeWidth={1.4} />
           </Link>
           <DropdownMenu>
             <DropdownMenuTrigger className="border-[0.014rem] border-primary py-1.5 px-3 md:py-2.5 md:px-4 rounded-md text-xs md:text-base flex gap-1.5">
-              إعدادات إضافية
+              {tCallToAction("additionalSettings")}
               <ChevronDown strokeWidth={1.4} />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="px-3">
@@ -62,11 +73,11 @@ const ServiceList: React.FC<ServiceListProps> = ({ data }) => {
                 onClick={() => handleDeleteServiceList()}
                 className="cursor-pointer w-full flex justify-end py-1.5"
               >
-                حذف جميع الخدمات
+                {tCallToAction("deleteAllServices")}
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer w-full flex justify-end py-1.5">
-                <Link href={"/admin-dashboard/engineering-services"}>
-                  الخدمات
+                <Link href={constants.links.adminEngineeringCategories}>
+                  {tCallToAction("categories")}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -74,10 +85,12 @@ const ServiceList: React.FC<ServiceListProps> = ({ data }) => {
         </div>
       </div>
       <div className="pb-2.5 flex justify-center items-center">
-        <h2 className="md:text-2xl"> جميع خدمات المكتب</h2>
+        <h2 className="md:text-2xl">
+          {tDashboardEngineeringService("allEngineeringServices")}
+        </h2>
       </div>
       <div className="mx-auto">
-        <DataTable columns={serviceColumns} data={JSON.parse(data)} />
+        <DataTable columns={serviceColumns} data={data} />
       </div>
     </>
   );

@@ -2,7 +2,6 @@ import mongoose, { Document, Schema, Types } from "mongoose";
 
 export interface IEngineeringCategory extends Document {
   _id: Types.ObjectId;
-  id: string;
   title: {
     ar: string;
     en: string;
@@ -44,12 +43,11 @@ const engineeringCategorySchema: Schema = new mongoose.Schema(
     categoryIcon: {
       type: String,
     },
-    services: [
-      {
-        type: [Schema.Types.ObjectId],
-        ref: "EngineeringService",
-      },
-    ],
+    services: {
+      type: [Schema.Types.ObjectId],
+      ref: "EngineeringService",
+    },
+
     SEOSettings: {
       pageTitle: {
         ar: { type: String, required: [true] },

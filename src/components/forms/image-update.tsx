@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
+
 import { AlertDialog } from "../ui/alert-dialog";
 import {
   Card,
@@ -18,24 +20,31 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import FileUpload from "../global/file-upload";
-import { Input } from "../ui/input";
-import { useToast } from "../ui/use-toast";
-import { Button } from "../ui/button";
-import BtnLoading from "../global/btn-loading";
-import Link from "next/link";
 import { Undo2 } from "lucide-react";
 import { Switch } from "../ui/switch";
+import FileUpload from "../global/file-upload";
+import { Input } from "../ui/input";
+import { Button } from "../ui/button";
+import BtnLoading from "../global/btn-loading";
+
+import { useForm } from "react-hook-form";
+import { useToast } from "../ui/use-toast";
+import { useExtractIdFromPath } from "@/hooks/useExtractIdFromPath";
+
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
 import { ImageSchema } from "@/lib/zod-schema/image";
 import { getImageById, updateImage } from "@/queries/gallery";
-import { useExtractIdFromPath } from "@/hooks/useExtractIdFromPath";
 import { ImageData } from "@/types/image-data";
+import { useTranslations } from "next-intl";
+import { constants } from "@/config/constants";
 
 const ImageUpdate = () => {
   const [imageData, setImageData] = useState<ImageData | null>(null);
+  const tDashboardGallery = useTranslations("dashboard.gallery")
+  const tResponse = useTranslations("responses")
+  const tCallToAction = useTranslations("callToAction");
   const { id } = useExtractIdFromPath();
   const { toast } = useToast();
 
@@ -48,8 +57,8 @@ const ImageUpdate = () => {
       } catch (error) {
         toast({
           variant: "destructive",
-          title: "فشل الحصول على الخدمة",
-          description: "الرجاء المحاولة مرة اخرى!",
+          title: tResponse("failedToGetImageDetails"),
+          description: tResponse("pleaseTryAgain"),
         });
       }
     };
@@ -89,13 +98,13 @@ const ImageUpdate = () => {
     try {
       await updateImage(id ?? "", values);
       toast({
-        title: "تعديل الصورة بنجاح",
+        title: tResponse("imageEditedSuccessfully"),
       });
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "فشل إنشاء التصنيف",
-        description: "الرجاء المحاولة مرة اخرى!",
+        title: tResponse("failedToEditImage"),
+        description: tResponse("pleaseTryAgain"),
       });
     }
   };
@@ -107,16 +116,18 @@ const ImageUpdate = () => {
           <Card>
             <CardHeader className="w-full flex flex-row justify-between">
               <div>
-                <CardTitle>البيانات الأساسية للمشروع</CardTitle>
+                <CardTitle>
+                  {tDashboardGallery("editingImageMainDetails")}
+                </CardTitle>
                 <CardDescription>
-                  يجب إدخال المعلومات التالية من أجل إنشاء مشروع جديد
+                  {tDashboardGallery("editingImageDetailsDescription")}
                 </CardDescription>
               </div>
               <Link
-                href={"/admin-dashboard/gallery"}
+                href={constants.links.adminGallery}
                 className="bg-transparent hover:bg-primary transform transition-all text-primary font-medium hover:text-white py-2 px-4 border border-primary hover:border-transparent rounded flex items-center gap-1.5"
               >
-                عودة الى المشاريع
+                {tCallToAction("backToImages")}
                 <Undo2 strokeWidth={1.4} className="mb-1" />
               </Link>
             </CardHeader>
@@ -129,7 +140,9 @@ const ImageUpdate = () => {
                     control={form.control}
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <FormLabel>صورة المشروع </FormLabel>
+                        <FormLabel>
+                          {tDashboardGallery("changeImage")}
+                        </FormLabel>
                         <FormControl>
                           <FileUpload
                             apiEndpoint="galleryImage"
@@ -149,9 +162,16 @@ const ImageUpdate = () => {
                     name="title.ar"
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <FormLabel>عنوان المشروع</FormLabel>
+                        <FormLabel>
+                          {tDashboardGallery("editingImageTitleAR")}
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="عنوان المشروع" {...field} />
+                          <Input
+                            placeholder={tDashboardGallery(
+                              "editingImageTitleAR"
+                            )}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -163,9 +183,16 @@ const ImageUpdate = () => {
                     name="title.en"
                     render={({ field }) => (
                       <FormItem className="w-full">
-                        <FormLabel>عنوان المشروع</FormLabel>
+                        <FormLabel>
+                          {tDashboardGallery("editingImageTitleEN")}
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="عنوان المشروع" {...field} />
+                          <Input
+                            placeholder={tDashboardGallery(
+                              "editingImageTitleEN"
+                            )}
+                            {...field}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -179,10 +206,10 @@ const ImageUpdate = () => {
                         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                           <div className="space-y-0.5">
                             <FormLabel className="text-base">
-                              إخفاء صورة المشروع
+                              {tDashboardGallery("hideProjectImage")}
                             </FormLabel>
                             <FormDescription>
-                              عدم إظهار صورة المشروع في الصفحة الرئيسية
+                              {tDashboardGallery("hideProjectImageDescription")}
                             </FormDescription>
                           </div>
                           <FormControl>
@@ -202,7 +229,7 @@ const ImageUpdate = () => {
                     className="text-white"
                     size={"lg"}
                   >
-                    {isPending ? <BtnLoading /> : "إدراج المشروع"}
+                    {isPending ? <BtnLoading /> : tCallToAction("saveEdits")}
                   </Button>
                 </div>
               </div>

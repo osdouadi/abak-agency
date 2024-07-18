@@ -15,12 +15,11 @@ import {
 } from "lucide-react";
 
 const navigationLinks = [
-  { title: "recuitment", href: "/recuitment", icon: BriefcaseBusiness },
   { title: "contactUs", href: "/contact-us", icon: BriefcaseBusiness },
   { title: "pricing", href: "/pricing", icon: Wallet },
   { title: "blogs", href: "/blogs", icon: Building2 },
   { title: "aboutUs", href: "/about-us", icon: CircleAlert },
-  { title: "home", href: "/site", icon: House },
+  { title: "home", href: "/", icon: House },
 ];
 
 const consultingServiceFeatures = [

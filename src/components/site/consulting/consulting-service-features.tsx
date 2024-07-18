@@ -6,7 +6,7 @@ import React from 'react'
 const ConsultingServiceFeatures: React.FC = () => {
   const tHomePage = useTranslations("site.homePage")
   return (
-    <div className="flex flex-col justify-center gap-5 md:gap-14 mx-auto pt-5 md:pt-0">
+    <div className="flex flex-col justify-center gap-5 md:gap-8 mx-auto py-8 md:pt-0 md:w-auto">
       {consultingServiceFeatures.map((item, index) => (
         <FeatureCard
           key={index}

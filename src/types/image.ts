@@ -3,7 +3,7 @@ export type Image = {
   _id: string;
   projectImage: string;
   title: string;
-  isDisabled: Boolean
+  isDisabled: boolean
   createdAt: Date;
   updatedAt: Date;
   __v: number;

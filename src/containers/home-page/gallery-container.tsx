@@ -2,7 +2,7 @@ import React from "react";
 import GalleryList from "@/components/site/gallery/gallery-list";
 import { getGallery } from "@/queries/gallery";
 
-const ProjectImageContainer = async () => {
+const GalleryContainer = async () => {
   let galleryData = [];
   let isLoading = true;
   let error = null;
@@ -14,7 +14,7 @@ const ProjectImageContainer = async () => {
     isLoading = false;
   }
   return (
-    <section className="w-full overflow-hidden md:mt-16" dir="ltr">
+    <section className="w-full overflow-hidden md:mt-8" dir="ltr">
       <GalleryList
         galleryData={galleryData}
         isLoading={isLoading}
@@ -24,4 +24,4 @@ const ProjectImageContainer = async () => {
   );
 };
 
-export default ProjectImageContainer;
+export default GalleryContainer;

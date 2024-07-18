@@ -1,49 +1,54 @@
 "use client";
 
+import Link from "next/link";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { formatDate } from "@/lib/utils";
+
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
+import { useTranslations } from "next-intl";
+
 import { deleteEngineeringService } from "@/queries/engineering-service";
+import { formatDate } from "@/lib/utils";
+import { constants } from "@/config/constants";
 
 export interface Service {
   id: string;
   title: { ar: string; en: string };
-  category: string
-  createdAt: string;
+  category: string;
+  createdAt: Date;
 }
 
 export const serviceColumns: ColumnDef<Service>[] = [
   {
     accessorKey: "title.ar",
-    header: "عنوان الخدمة",
+    header: "engineeringServiceTitle",
   },
   {
     accessorKey: "category.title.ar",
-    header: "تصنيف الخدمة",
+    header: "engineeringServiceCategory",
   },
   {
     accessorKey: `createdAt`,
-    header: "تاريخ إضافة الخدمة",
+    header: "engineeringServiceCreatedAt",
     cell: ({ row }) => formatDate(row.original.createdAt),
   },
   {
-    header: "الاجراءات",
+    header: "actions",
     id: "actions",
     cell: ({ row }) => {
       const service = row.original;
       const router = useRouter();
+      const tResponse = useTranslations("responses");
+      const tCallToAction = useTranslations("callToAction");
       const { toast } = useToast();
 
       const handleDeleteServiceById = async (serviceId: string) => {
@@ -51,13 +56,13 @@ export const serviceColumns: ColumnDef<Service>[] = [
           await deleteEngineeringService(serviceId);
           router.refresh();
           toast({
-            title: "حذف الخدمة بنجاح",
+            title: tResponse("enineeringServiceDeletedSuccessfully"),
           });
         } catch (error) {
           toast({
             variant: "destructive",
-            title: "فشل حذف الخدمة",
-            description: "الرجاء المحاولة مرة اخرى!",
+            title: tResponse("enineeringServiceDeletedSuccessfully"),
+            description: tResponse("pleaseTryAgain"),
           });
         }
       };
@@ -66,32 +71,22 @@ export const serviceColumns: ColumnDef<Service>[] = [
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">الإجراءات</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="flex flex-col items-end">
-            <DropdownMenuLabel>الإجراءات</DropdownMenuLabel>
-            <DropdownMenuSeparator />
             <DropdownMenuItem>
               <Link
-                href={`/admin-dashboard/engineering-services/${service.id}`}
+                href={`${constants.links.adminUpdateEngineeringService}${service?.id}`}
               >
-                عرض معلومات الخدمة
-              </Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Link
-                href={`/admin-dashboard/engineering-services/update/${service?.id}`}
-              >
-                تعديل الخدمة
+                {tCallToAction("editEngineeringService")}
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => handleDeleteServiceById(service?.id)}
               className="cursor-pointer"
             >
-              حذف الخدمة
+              {tCallToAction("deleteEngineeringService")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

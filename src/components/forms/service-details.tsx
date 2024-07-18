@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import Link from "next/link";
+
 import { AlertDialog } from "../ui/alert-dialog";
 import {
   Card,
@@ -17,19 +19,12 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import FileUpload from "../global/file-upload";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { getEnginneringCategoryList } from "@/queries/engineering-category";
-import { useToast } from "../ui/use-toast";
 import { Button } from "../ui/button";
 import InputGroup from "../global/input-group";
 import BtnLoading from "../global/btn-loading";
-import Link from "next/link";
-import { Undo2 } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -37,12 +32,30 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Undo2 } from "lucide-react";
+
+import { useForm } from "react-hook-form";
+import { useToast } from "../ui/use-toast";
+
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { getEnginneringCategoryList } from "@/queries/engineering-category";
 import { createEngineeringService } from "@/queries/engineering-service";
 import { ServiceSchema } from "@/lib/zod-schema/service-schema";
 import { Category } from "@/types/category";
+import { useTranslations } from "next-intl";
+import { constants } from "@/config/constants";
 
 const ServiceDetails = () => {
   const [categoryList, setCategoryList] = useState<Category[]>([]);
+
+  const tDashboardEngineeringService = useTranslations(
+    "dashboard.engineeringService"
+  );
+  const tResponse = useTranslations("responses");
+  const tCallToAction = useTranslations("callToAction");
+
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof ServiceSchema>>({
@@ -79,10 +92,9 @@ const ServiceDetails = () => {
     const fetchCategoryList = async () => {
       try {
         const response = await getEnginneringCategoryList();
-        const parsedResponse = JSON.parse(response);
 
-        if (parsedResponse) {
-          setCategoryList(parsedResponse);
+        if (response) {
+          setCategoryList(response);
         }
       } catch (error) {
         console.log(error);
@@ -96,13 +108,13 @@ const ServiceDetails = () => {
     try {
       await createEngineeringService(values);
       toast({
-        title: "إنشاء التصنيف بنجاح",
+        title: tResponse("engineeringServiceAddedSuccessfully"),
       });
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "فشل إنشاء التصنيف",
-        description: "الرجاء المحاولة مرة اخرى!",
+        title: tResponse("failedToAddEngineeringService"),
+        description: tResponse("pleaseTryAgain"),
       });
     }
   };
@@ -114,16 +126,18 @@ const ServiceDetails = () => {
           <Card>
             <CardHeader className="w-full flex flex-row justify-between">
               <div>
-                <CardTitle>البيانات الأساسية للخدمة</CardTitle>
+                <CardTitle>
+                  {tDashboardEngineeringService("detailsTitle")}
+                </CardTitle>
                 <CardDescription>
-                  يجب إدخال المعلومات التالية من أجل إنشاء خدمة جديد
+                  {tDashboardEngineeringService("detailsDescription")}
                 </CardDescription>
               </div>
               <Link
-                href={"/admin-dashboard/engineering-services"}
+                href={constants.links.adminEngineeringServices}
                 className="bg-transparent hover:bg-primary transform transition-all text-primary font-medium hover:text-white py-2 px-4 border border-primary hover:border-transparent rounded flex items-center gap-1.5"
               >
-                عودة الى الخدمات
+                {tCallToAction("backToEngineeringServices")}
                 <Undo2 strokeWidth={1.4} className="mb-1" />
               </Link>
             </CardHeader>
@@ -135,7 +149,9 @@ const ServiceDetails = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>أيقونة الخدمة الهندسية</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService("serviceIcon")}
+                      </FormLabel>
                       <FormControl>
                         <FileUpload
                           apiEndpoint="serviceIcon"
@@ -153,7 +169,9 @@ const ServiceDetails = () => {
                   control={form.control}
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>صورة الخدمة الهندسية</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService("serviceBanner")}
+                      </FormLabel>
                       <FormControl>
                         <FileUpload
                           apiEndpoint="serviceBanner"
@@ -173,9 +191,14 @@ const ServiceDetails = () => {
                   name="title.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان الخدمة</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService("titleAR")}
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="عنوان الخدمة" {...field} />
+                        <Input
+                          placeholder={tDashboardEngineeringService("titleAR")}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -187,10 +210,12 @@ const ServiceDetails = () => {
                   name="title.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان الخدمة باللغة الإنجليزية</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService("titleEN")}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="عنوان الخدمة باللغة الإنجليزية"
+                          placeholder={tDashboardEngineeringService("titleEN")}
                           {...field}
                         />
                       </FormControl>
@@ -203,13 +228,17 @@ const ServiceDetails = () => {
                 <FormField
                   disabled={isPending}
                   control={form.control}
-                  name="SEOSettings.pageTitle.ar"
+                  name="description.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف الخدمة</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService("descriptionAR")}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف الخدمة"
+                          placeholder={tDashboardEngineeringService(
+                            "descriptionAR"
+                          )}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -221,13 +250,17 @@ const ServiceDetails = () => {
                 <FormField
                   disabled={isPending}
                   control={form.control}
-                  name="SEOSettings.pageTitle.en"
+                  name="description.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف الخدمة باللغة الإنجليزية</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService("descriptionEN")}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف الخدمة باللغة الإنجليزية"
+                          placeholder={tDashboardEngineeringService(
+                            "descriptionEN"
+                          )}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -242,14 +275,22 @@ const ServiceDetails = () => {
                 name="category"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>تصنيف الخدمة</FormLabel>
+                    <FormLabel>
+                      {tDashboardEngineeringService(
+                        "engineeringServiceCategory"
+                      )}
+                    </FormLabel>
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="إختيار تصنيف مناسب للخدمة" />
+                          <SelectValue
+                            placeholder={tDashboardEngineeringService(
+                              "engineeringServiceCategoryPlaceholder"
+                            )}
+                          />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -269,9 +310,11 @@ const ServiceDetails = () => {
           </Card>
           <Card>
             <CardHeader>
-              <CardTitle>إعدادات السيو</CardTitle>
+              <CardTitle>
+                {tDashboardEngineeringService("SEOSettings")}
+              </CardTitle>
               <CardDescription>
-                اعدادات خاصة بتحسين محركات البحث الخصة بصفحة الخدمة
+                {tDashboardEngineeringService("SEOSettingsDescription")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -279,12 +322,19 @@ const ServiceDetails = () => {
                 <FormField
                   disabled={isPending}
                   control={form.control}
-                  name="SEOSettings.pageDescription.ar"
+                  name="SEOSettings.pageTitle.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان صفحة الخدمة</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService("pageTitleAR")}
+                      </FormLabel>
                       <FormControl>
-                        <Input placeholder="عنوان صفحة الخدمة" {...field} />
+                        <Input
+                          placeholder={tDashboardEngineeringService(
+                            "pageTitleAR"
+                          )}
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -293,13 +343,17 @@ const ServiceDetails = () => {
                 <FormField
                   disabled={isPending}
                   control={form.control}
-                  name="SEOSettings.pageDescription.en"
+                  name="SEOSettings.pageTitle.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>عنوان صفحة الخدمة باللغة الإنجليزية</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService("pageTitleEN")}
+                      </FormLabel>
                       <FormControl>
                         <Input
-                          placeholder="عنوان صفحة الخدمة باللغة الإنجليزية"
+                          placeholder={tDashboardEngineeringService(
+                            "pageTitleEN"
+                          )}
                           {...field}
                         />
                       </FormControl>
@@ -312,13 +366,17 @@ const ServiceDetails = () => {
                 <FormField
                   disabled={isPending}
                   control={form.control}
-                  name="description.ar"
+                  name="SEOSettings.pageDescription.ar"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف صفحة الخدمة</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService("pageDescriptionAR")}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف صفحة الخدمة"
+                          placeholder={tDashboardEngineeringService(
+                            "pageDescriptionAR"
+                          )}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -330,13 +388,17 @@ const ServiceDetails = () => {
                 <FormField
                   disabled={isPending}
                   control={form.control}
-                  name="description.en"
+                  name="SEOSettings.pageDescription.en"
                   render={({ field }) => (
                     <FormItem className="w-full md:w-1/2">
-                      <FormLabel>وصف صفحة الخدمة باللغة الإنجليزية</FormLabel>
+                      <FormLabel>
+                        {tDashboardEngineeringService("pageDescriptionEN")}
+                      </FormLabel>
                       <FormControl>
                         <Textarea
-                          placeholder="وصف صفحة الخدمة باللغة الإنجليزية"
+                          placeholder={tDashboardEngineeringService(
+                            "pageDescriptionEN"
+                          )}
                           {...field}
                           className="h-5 md:h-28"
                         />
@@ -355,7 +417,7 @@ const ServiceDetails = () => {
               className="text-white"
               size={"lg"}
             >
-              {isPending ? <BtnLoading /> : "إدراج الخدمة"}
+              {isPending ? <BtnLoading /> : tCallToAction("addService")}
             </Button>
           </div>
         </form>

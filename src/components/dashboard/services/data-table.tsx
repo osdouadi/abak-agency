@@ -16,6 +16,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+import { useTranslations } from "next-intl";
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -31,7 +33,8 @@ export function DataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
+  const tTable = useTranslations("table");
+  const tResponse = useTranslations("noResult");
   return (
     <div className="rounded-md border">
       <Table>
@@ -44,7 +47,7 @@ export function DataTable<TData, TValue>({
                     {header.isPlaceholder
                       ? null
                       : flexRender(
-                          header.column.columnDef.header,
+                          tTable(header.column.columnDef.header),
                           header.getContext()
                         )}
                   </TableHead>
@@ -55,7 +58,6 @@ export function DataTable<TData, TValue>({
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows?.length ? (
-  
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
@@ -71,7 +73,7 @@ export function DataTable<TData, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                {tResponse("noResult")}
               </TableCell>
             </TableRow>
           )}

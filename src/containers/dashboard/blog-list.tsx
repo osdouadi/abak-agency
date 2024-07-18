@@ -1,5 +1,12 @@
 "use client";
 
+import React from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { useTranslations } from "next-intl";
+import { useToast } from "@/components/ui/use-toast";
+
 import { blogColumns } from "@/components/dashboard/data-table/blog-columns";
 import { DataTable } from "@/components/dashboard/services/data-table";
 import {
@@ -8,18 +15,23 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useToast } from "@/components/ui/use-toast";
+
+import { constants } from "@/config/constants";
 import { deleteBlogList } from "@/queries/blog";
 import { ChevronDown, Plus } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React from "react";
+
+
+
 
 export type BlogListProps = {
   data: any;
 };
 
 const BlogList: React.FC<BlogListProps> = ({ data }) => {
+  const tResponse = useTranslations("responses");
+  const tDashboardBlog = useTranslations("dashboard.blog");
+  const tCallToAction = useTranslations("callToAction");
+
   const { toast } = useToast();
   const router = useRouter();
 
@@ -27,33 +39,33 @@ const BlogList: React.FC<BlogListProps> = ({ data }) => {
     try {
       await deleteBlogList();
       toast({
-        title: "حذف جميع التصنيفات بنجاح",
+        title: tResponse("allBlogsDeletedSuccessfully"),
       });
       router.refresh();
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "فشل حذف التصنيفات",
-        description: "الرجاء المحاولة مرة اخرى!",
+        title: tResponse("failedToDeleteAllBlogs"),
+        description: tResponse("pleaseTryAgain"),
       });
     }
   };
 
   return (
     <>
-      <div className="mb-7 flex justify-between items-center">
-        <h2 className="md:text-3xl"> المقالات الهندسية</h2>
+      <div className="mb-7 flex justify-between items-center flex-col md:flex-row">
+        <h2 className="md:text-3xl pb-2 md:pb-0">{tDashboardBlog("engineeringBlogs")}</h2>
         <div className="flex items-center justify-between gap-2 md:gap-4">
           <Link
-            href={"/admin-dashboard/blogs/new"}
+            href={constants.links.adminNewBlog}
             className="bg-primary rounded-md py-1.5 px-3 md:py-2.5 md:px-4 text-xs md:text-base flex gap-1.5"
           >
-            إضافة تصنيف جديد
+            {tCallToAction("addNewBlog")}
             <Plus strokeWidth={1.4} />
           </Link>
           <DropdownMenu>
             <DropdownMenuTrigger className="border-[0.014rem] border-primary py-1.5 px-3 md:py-2.5 md:px-4 rounded-md text-xs md:text-base flex gap-1.5">
-              إعدادات إضافية
+              {tCallToAction("additionalSettings")}
               <ChevronDown strokeWidth={1.4} />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="px-3">
@@ -61,11 +73,11 @@ const BlogList: React.FC<BlogListProps> = ({ data }) => {
                 onClick={() => handleDeleteBlogList()}
                 className="cursor-pointer w-full flex justify-end py-1.5"
               >
-                حذف جميع التصنيفات
+                {tCallToAction("deleteAllBlogs")}
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer w-full flex justify-end py-1.5">
-                <Link href={"/admin-dashboard/engineering-services"}>
-                  الخدمات
+                <Link href={constants.links.adminDashboard}>
+                  {tCallToAction("backToDashboard")}
                 </Link>
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -73,10 +85,10 @@ const BlogList: React.FC<BlogListProps> = ({ data }) => {
         </div>
       </div>
       <div className="pb-2.5 flex justify-center items-center">
-        <h2 className="md:text-2xl"> جميع خدمات المكتب</h2>
+        <h2 className="md:text-2xl">{tDashboardBlog("allEngineeringBlogs")}</h2>
       </div>
       <div className="mx-auto">
-        <DataTable columns={blogColumns} data={JSON.parse(data)} />
+        <DataTable columns={blogColumns} data={data} />
       </div>
     </>
   );

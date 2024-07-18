@@ -9,7 +9,7 @@ export const getConsultingOrdersList = async () => {
 
   try {
     const consultingOrderList = await ConsultingOrder.find({});
-    return JSON.stringify(consultingOrderList);
+    return JSON.parse(JSON.stringify(consultingOrderList));
   } catch (error: any) {
     throw new Error(error.message || "Failed to fetch categories list");
   }
